@@ -1,0 +1,25 @@
+::-webkit-scrollbar-button {
+    background-repeat:no-repeat;
+    width:5px;
+}
+
+::-webkit-scrollbar-track {
+    opacity: 0.8;
+    background-color: #56999f;
+    height: 100%;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color:#CDC5BF;
+}
+
+
+::-webkit-resizer{
+    background-repeat:no-repeat;
+    width:4px;
+}
+
+::-webkit-scrollbar{
+    width: 4px;
+}

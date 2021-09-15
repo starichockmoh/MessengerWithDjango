@@ -1,0 +1,19 @@
+.sideBar-enter {
+    opacity: 0;
+}
+.sideBar-enter-active {
+    opacity: 1;
+    left: -1000px;
+    transform: translateX(1000px);
+    transition: opacity 300ms, transform 300ms;
+}
+.sideBar-exit {
+    opacity: 1;
+}
+.sideBar-exit-active {
+    opacity: 0;
+    transform: translateX(-1000px);
+    transition: opacity 300ms, transform 300ms;
+}
+
+
