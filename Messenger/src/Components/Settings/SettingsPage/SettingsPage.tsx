@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     AdInfo_Name, AdInfo_Online, AdvancedIcon,
     Avatar_UserAvatar, ChatIcon, EditIcon, FAQIcon, FoldersIcon, NotificationsIcon, SecurityIcon,
@@ -12,11 +12,22 @@ import {SideHeader} from "../../LeftSideBar/SideHeader";
 import {Upload} from "antd";
 import {CustomNavLink, SpecialLine} from "../../Common/CommonElements.styled";
 import {StyledComponent} from "styled-components";
+import {useDispatch, useSelector} from "react-redux";
+import {AppStateType} from "../../../Redux/Store";
+import {ActivateProfileSaga} from "../../../Redux/Sagas/ProfileSaga";
 
 export const SettingsPage: React.FC = () => {
+    const dispatch = useDispatch()
+    const UserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
+
+    useEffect(() => {
+        UserID && dispatch(ActivateProfileSaga.Profile(UserID))
+    }, [UserID])
+
+    const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
     return <Settings>
         <SideHeader header={'Settings'}/>
-        <UserProfile Avatar={seva} Name={'Сева Борисян'}/>
+        {UserData && <UserProfile Avatar={seva} Name={UserData.username} Is_online={UserData.is_online}/>}
         <SpecialLine/>
         <SettingsElement Setting={'Edit profile'} Icon={EditIcon} Link={'/edit_profile'}/>
         <SettingsElement Setting={'Security'} Icon={SecurityIcon} Link={'/edit_profile'}/>
@@ -33,8 +44,9 @@ export const SettingsPage: React.FC = () => {
 type UserProfilePropsType = {
     Avatar: string
     Name: string
+    Is_online: boolean
 }
-const UserProfile: React.FC<UserProfilePropsType> = ({Name, Avatar}) => {
+const UserProfile: React.FC<UserProfilePropsType> = ({Name, Avatar, Is_online}) => {
     return <UserBlock>
         <UserBlock_Avatar>
             <Avatar_UserAvatar src={Avatar}/>
@@ -44,7 +56,7 @@ const UserProfile: React.FC<UserProfilePropsType> = ({Name, Avatar}) => {
                 {Name}
             </AdInfo_Name>
             <AdInfo_Online>
-                online
+                {Is_online? "online" : "offline"}
             </AdInfo_Online>
         </UserBlock_AdInfo>
     </UserBlock>

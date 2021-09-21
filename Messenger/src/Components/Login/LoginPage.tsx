@@ -2,34 +2,43 @@ import React, {useState} from "react";
 import {LoginBlock, LoginWrapper} from "./LoginPage.styled"
 import {Form, Input, Button, Checkbox, PageHeader, Alert} from 'antd'
 import {NullableType} from "../../Types/Types";
+import {useDispatch, useSelector} from "react-redux";
+import {ActivateAuthSaga} from "../../Redux/Sagas/AuthSaga";
+import App from "../../App";
+import {AppStateType} from "../../Redux/Store";
 
 
 export const LoginPage: React.FC = () => {
     const [Page, SetPage] = useState<'UP' | 'IN'>('IN')
-
     return <LoginWrapper>
         {Page === 'UP'? <Up SetPage={SetPage}/> : <In SetPage={SetPage}/>}
     </LoginWrapper>
 }
 
 
+
+
 type InUpPropsType = {
     SetPage: (page: 'UP' | 'IN') => void
 }
+type LoginValuesType = {
+    password: string
+    remember: boolean
+    username: string
+}
 
 const In: React.FC<InUpPropsType> = ({SetPage}) => {
-    const onFinish = (values: any) => {
-        console.log('Success:', values);
+    const dispatch = useDispatch()
+    const onFinish = (values: LoginValuesType) => {
+        dispatch(ActivateAuthSaga.Login(values.password, values.username))
     };
+    const ErrorMessage = useSelector((state: AppStateType) => state.Auth.error)
 
-    const onFinishFailed = (errorInfo: any) => {
-        console.log('Failed:', errorInfo);
-    };
     return <LoginBlock>
+        {ErrorMessage && <Alert message="Error" description={ErrorMessage} type="error" showIcon/>}
         <PageHeader title={'LoginPage'}/>
         <Form name="basic"
-              initialValues={{remember: true}} onFinish={onFinish} onFinishFailed={onFinishFailed}
-              autoComplete="off">
+              initialValues={{remember: true}} onFinish={onFinish} autoComplete="off">
             <Form.Item
                 label="Username"
                 name="username"
@@ -49,7 +58,7 @@ const In: React.FC<InUpPropsType> = ({SetPage}) => {
             </Form.Item>
 
             <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button disabled={!!ErrorMessage} type="primary" htmlType="submit">
                     LogIn
                 </Button>
             </Form.Item>

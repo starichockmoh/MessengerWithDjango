@@ -1,16 +1,23 @@
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import thunkMiddleware from "redux-thunk";
 import createSagaMiddleware from "redux-saga"
-import {all} from "redux-saga/effects";
+import {all,spawn} from "redux-saga/effects";
 import {AppReducer} from "./Reducers/AppReducer";
 import {ChannelInfoReducer} from "./Reducers/ChannelInfoReducer";
 import {ChannelListsReducer} from "./Reducers/ChannelListsReducer";
+import {AuthReducer} from "./Reducers/AuthReducer";
+import {AuthSagaWorker, WatchAuthSaga, WatchLoginSaga, WatchLogoutSaga} from "./Sagas/AuthSaga";
+import {ProfileReducer} from "./Reducers/ProfileReducer";
+import {WatchProfileChangeSaga, WatchProfileSaga} from "./Sagas/ProfileSaga";
+
 
 
 const MainReducer = combineReducers({
     App: AppReducer,
     ChannelInfo: ChannelInfoReducer,
     ChannelLists: ChannelListsReducer,
+    Auth: AuthReducer,
+    Profile: ProfileReducer
 })
 
 export type AppStateType = ReturnType<typeof MainReducer>
@@ -23,6 +30,13 @@ const store = createStore(MainReducer, composeEnhancers(applyMiddleware(
 )));
 
 function* rootSaga() {
+    yield all([
+        spawn(WatchAuthSaga),
+        spawn(WatchLoginSaga),
+        spawn(WatchLogoutSaga),
+        spawn(WatchProfileSaga),
+        spawn(WatchProfileChangeSaga)
+    ])
 }
 sagaMiddleware.run(rootSaga)
 

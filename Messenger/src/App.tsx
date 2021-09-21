@@ -8,20 +8,29 @@ import {SettingsPage} from "./Components/Settings/SettingsPage/SettingsPage"
 import {CSSTransition} from "react-transition-group";
 import "./Components/LeftSideBar/AnimationSideBar.css"
 import {LeftSideBar} from "./Components/LeftSideBar/LeftSideBar";
-import {Exit} from "./Components/Exit/Exit";
 import {LoginPage} from "./Components/Login/LoginPage";
 import axios from "axios";
+import {authAPI} from "./Api/AuthAPI";
+import {ActivateAuthSaga} from "./Redux/Sagas/AuthSaga";
+
 
 const App = () => {
+    const isAuth = useSelector((state: AppStateType) => state.Auth.isAuth)
+    const isInit  = useSelector((state: AppStateType) => state.App.isInit)
+    const dispatch = useDispatch()
+
     useEffect(() => {
-        axios.post('http://127.0.0.1:8000/account/api/token/', {username: 'admin', password: 123})
+        dispatch(ActivateAuthSaga.Auth())
     }, [])
-    const [isAuth, SetAuth] = useState(true)
-    if (isAuth) return <>
+
+    if (!isInit) return <div>
+        Init...
+    </div>
+    if (isAuth && isInit) return <>
         <LeftSideBar/>
         <Layout/>
     </>
-    else return <LoginPage/>
+    return <LoginPage/>
 }
 const AppRouter = withRouter(App)
 const AppContainer = () => {

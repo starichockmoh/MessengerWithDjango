@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {CloseOutlined} from "@ant-design/icons";
 import {
     CallsIcon,
@@ -21,8 +21,22 @@ import seva from "./../../Assets/photo_2017-11-03_18-44-32.jpg"
 import "../LeftSideBar/AnimationSideBar.css"
 import {CustomNavLink} from "../Common/CommonElements.styled";
 import {StyledComponent} from "styled-components";
+import {useDispatch, useSelector} from "react-redux";
+import {AppStateType} from "../../Redux/Store";
+import {profileAPI} from "../../Api/ProfileAPI";
+import {ActivateProfileSaga} from "../../Redux/Sagas/ProfileSaga";
+import {ToNicePhoneNumber} from "../../Helper Functions/ToNicePhoneNumber";
+
 
 export const Menu: React.FC = () => {
+    const dispatch = useDispatch()
+    const UserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
+
+    useEffect(() => {
+        UserID && dispatch(ActivateProfileSaga.Profile(UserID))
+    }, [UserID])
+
+    const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
     return <MenuBlock>
         <CloseButton>
             <CustomNavLink to={'/'}>
@@ -30,7 +44,7 @@ export const Menu: React.FC = () => {
             </CustomNavLink>
         </CloseButton>
 
-        <UserInfo Name={'Сева Борисян'} Phone={'+7 989 564 45 25'} Avatar={seva}/>
+        {!!UserData && <UserInfo Name={UserData.username} Phone={ToNicePhoneNumber(UserData.telephone)} Avatar={seva}/>}
 
         <MenuContent>
             <MenuElement Name={'New Group'} Link={'/settings'} Icon={GroupIcon}/>
