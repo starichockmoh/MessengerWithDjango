@@ -4,8 +4,9 @@ from thread import views
 app_name = 'thread'
 urlpatterns = [
     # Threads
-    path('threads/', views.ThreadActiveOfUser.as_view()),
-    path('threads_archive/', views.ThreadArchiveOfUser.as_view()),
+    path('threads_create/', views.ThreadActiveOfUser.as_view()),
+    path('threads/', views.ThreadActiveOfUserFront.as_view()),
+    path('threads_archive/', views.ThreadArchiveOfUserFront.as_view()),
     path('thread/<int:pk>/', views.ThreadDetail.as_view()),
     path('thread_push/<int:pk>/', views.ReductPushThread.as_view()),
     path('thread_archive/<int:pk>/', views.ReductArchiveThread.as_view()),

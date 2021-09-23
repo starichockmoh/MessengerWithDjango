@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from channel.models import *
-from main.serializers import FriendsListSerializer
+from account.serializers import FriendsListSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):

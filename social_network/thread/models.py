@@ -1,12 +1,12 @@
 from django.db import models
-from main.models import AdvUser
+from account.models import AdvUser
 
 
 class Thread(models.Model):
-    push_notification = models.ManyToManyField(AdvUser, related_name='push_notification')
+    push_notification = models.ManyToManyField(AdvUser, related_name='push_notification', blank=True)
     archive = models.ManyToManyField(AdvUser, related_name='archive', blank=True, null=True)
     participants = models.ManyToManyField(AdvUser)
-    deleted = models.ManyToManyField(AdvUser, related_name='deleted')
+    deleted = models.ManyToManyField(AdvUser, related_name='deleted', blank=True)
 
     def get_images(self):
         return self.messegephoto_set.all()

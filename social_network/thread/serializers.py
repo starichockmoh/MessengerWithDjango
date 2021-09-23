@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from thread.models import *
-from main.serializers import FriendsListSerializer
+from account.serializers import FriendsListSerializer
 
 
 class MessegePhotoSerializer(serializers.ModelSerializer):
@@ -50,6 +50,7 @@ class MessegeSerializer(serializers.ModelSerializer):
 
 
 class ThreadListSerializer(serializers.ModelSerializer):
+    # participants = FriendsListSerializer(many=True, required=False)
     get_messeges = MessegeSerializer(many=True, required=False)
 
     class Meta:
@@ -70,3 +71,14 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
         fields = ['pk', 'participants', 'get_messeges', 'push_notification', 'archive', 'deleted']
         read_only_fields = ['pk', 'participants', 'get_messeges']
         extra_kwargs = {'participants': {'required': False}}
+
+
+# Сериализатор для фронта чтобы отображались пользователи диалога
+class ThreadListFrontSerializer(serializers.ModelSerializer):
+    participants = FriendsListSerializer(many=True, required=False)
+    get_messeges = MessegeSerializer(many=True, required=False)
+
+    class Meta:
+        model = Thread
+        fields = ['pk', 'participants', 'get_messeges', 'push_notification', 'archive']
+        read_only_fields = ['pk', 'archive']

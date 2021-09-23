@@ -4,6 +4,7 @@ from thread.serializers import (ThreadListSerializer,
                                 MessegeSerializer,
                                 ThreadDetailSerializer,
                                 MessegePhotoSerializer,
+                                ThreadListFrontSerializer
                                 )
 from rest_framework.views import APIView
 from rest_framework import status
@@ -15,14 +16,9 @@ from rest_framework.parsers import MultiPartParser, FileUploadParser
 from django.http import Http404
 
 
+# Класс для создания диалога но не для просмотра
 class ThreadActiveOfUser(APIView):
     permission_classes = [IsAuthenticated, ]
-
-    def get(self, request):
-        threads = Thread.objects.filter(participants__in=[request.user],
-                                        archive=False)
-        serializer = ThreadListSerializer(threads, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         serializer = ThreadListSerializer(data=request.data)
@@ -32,13 +28,22 @@ class ThreadActiveOfUser(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ThreadArchiveOfUser(APIView):
+class ThreadActiveOfUserFront(APIView):
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request):
+        threads = Thread.objects.filter(participants__in=[request.user]).exclude(archive__in=[request.user])
+        serializer = ThreadListFrontSerializer(threads, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ThreadArchiveOfUserFront(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request):
         threads = Thread.objects.filter(participants__in=[request.user],
-                                        archive=True)
-        serializer = ThreadListSerializer(threads, many=True)
+                                        archive__in=[request.user])
+        serializer = ThreadListFrontSerializer(threads, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

@@ -1,5 +1,5 @@
 from django.db import models
-from main.models import AdvUser
+from account.models import AdvUser
 
 
 class Channel(models.Model):

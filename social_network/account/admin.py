@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import AdvUser
+from account.models import AdvUser
 
 admin.site.register(AdvUser)
 

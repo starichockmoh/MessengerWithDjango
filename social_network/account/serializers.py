@@ -1,22 +1,38 @@
 from rest_framework import serializers
-from main.models import AdvUser, AvatarImageProfile
+from account.models import AdvUser, AvatarImageProfile
 from rest_framework.response import Response
+
+
+class AvatarImageProfileSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        request = self.context.get("request")
+        user_photo = AvatarImageProfile.objects.create(
+            image=validated_data['image'],
+            user=request.user
+        )
+        return user_photo
+
+    class Meta:
+        model = AvatarImageProfile
+        fields = '__all__'
+        extra_kwargs = {'user': {'required': False}}
 
 
 class FriendsListSerializer(serializers.ModelSerializer):
     pk = serializers.IntegerField(read_only=True)
-    avatar = serializers.ImageField(read_only=True, allow_null=True)
     last_active = serializers.DateTimeField(read_only=True, allow_null=True)
     is_online = serializers.BooleanField(read_only=True)
+    addit_image = AvatarImageProfileSerializer(many=True, required=False)
 
     class Meta:
         model = AdvUser
-        fields = ["pk", "avatar", "last_active", "is_online", "first_name", "last_name"]
+        fields = ["pk", "last_active", "is_online", "first_name", "last_name", "addit_image"]
 
 
 class AdvUserSerializer(serializers.ModelSerializer):
     friends = FriendsListSerializer(many=True, required=False)
     password = serializers.CharField(write_only=True, required=False)
+    addit_image = AvatarImageProfileSerializer(many=True, required=False)
 
     def create(self, validated_data):
         user = AdvUser.objects.create_user(
@@ -39,9 +55,8 @@ class AdvUserSerializer(serializers.ModelSerializer):
         fields = ["pk", "last_active",
                   "is_online", "first_name",
                   "last_name", "about_user", "username",
-                  "friends", "telephone", "password",
+                  "friends", "telephone", "password", "addit_image"
                   ]
         read_only_fields = ('last_active', 'is_online', 'pk')
         extra_kwargs = {'username': {'required': False}}
-
 

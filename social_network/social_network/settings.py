@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'main',
+    'account',
     'thread',
     'channel',
     'django_cleanup',
@@ -126,7 +126,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-AUTH_USER_MODEL = 'main.AdvUser'
+AUTH_USER_MODEL = 'account.AdvUser'
 
 EMAIL_PORT = 1025
 
