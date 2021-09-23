@@ -30,6 +30,25 @@ export type ChangedProfileType = {
 }
 
 
+export type DialogType = {
+    archive: Array<number>
+    get_messeges: Array<MessageType>
+    participants: Array<number>
+    pk: number
+    push_notification: Array<number>
+}
+
+
+export type MessageType = {
+    datetime: string
+    get_images: []
+    pk: number
+    sender: number
+    text: string
+    thread: number
+    who_deleted_the_message:Array<number>
+}
+
 export type NullableType<MT> = null | MT
 
 type PropertiesType<T> = T extends {[key: string]: infer U} ? U : never

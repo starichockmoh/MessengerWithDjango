@@ -30,8 +30,12 @@ export function* WatchProfileChangeSaga() {
     while (true) {
         try {
             const NewProfile: ChangedProfileType = yield take( "PROFILE_SAGAS/CHANGE_PROFILE")
+            yield put(ProfileAC.SetFetching(true))
             const ProfileResponse: NewProfileResponseType = yield call(profileAPI.change_profile, NewProfile)
-            yield put(ProfileAC.SetProfile(ProfileResponse.data))
+            if (ProfileResponse.status === 201){
+                yield put(ProfileAC.SetProfile(ProfileResponse.data))
+                yield put(ProfileAC.SetFetching(false))
+            }
         } catch (error) {
             console.log(error) //Show error on screen
         }

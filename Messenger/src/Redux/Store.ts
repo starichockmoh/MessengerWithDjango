@@ -9,6 +9,8 @@ import {AuthReducer} from "./Reducers/AuthReducer";
 import {AuthSagaWorker, WatchAuthSaga, WatchLoginSaga, WatchLogoutSaga} from "./Sagas/AuthSaga";
 import {ProfileReducer} from "./Reducers/ProfileReducer";
 import {WatchProfileChangeSaga, WatchProfileSaga} from "./Sagas/ProfileSaga";
+import {DialogsReducer} from "./Reducers/DialogsReducer";
+import {WatchDialogsSaga} from "./Sagas/DialogsSaga";
 
 
 
@@ -17,7 +19,8 @@ const MainReducer = combineReducers({
     ChannelInfo: ChannelInfoReducer,
     ChannelLists: ChannelListsReducer,
     Auth: AuthReducer,
-    Profile: ProfileReducer
+    Profile: ProfileReducer,
+    Dialogs: DialogsReducer
 })
 
 export type AppStateType = ReturnType<typeof MainReducer>
@@ -35,7 +38,8 @@ function* rootSaga() {
         spawn(WatchLoginSaga),
         spawn(WatchLogoutSaga),
         spawn(WatchProfileSaga),
-        spawn(WatchProfileChangeSaga)
+        spawn(WatchProfileChangeSaga),
+        spawn(WatchDialogsSaga)
     ])
 }
 sagaMiddleware.run(rootSaga)

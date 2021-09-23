@@ -5,6 +5,8 @@ import {Button} from "antd";
 export const ChannelsBlock = styled("div")`
   overflow-y: scroll;
   height: 93vh;
+  width: 20vw;
+  overflow-x: hidden;
 `
 
 export const ArchivedChannelsBlock = styled("div")`

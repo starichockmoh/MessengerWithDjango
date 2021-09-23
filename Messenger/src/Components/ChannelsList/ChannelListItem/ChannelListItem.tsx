@@ -16,7 +16,7 @@ import { NavLink } from "react-router-dom";
 type PropsType = {
     ChannelPhoto: string
     ChannelName: string
-    LastMessageData: string
+    LastMessageDate: string
     LastMessage: {
         Media: string | null
         Text: string | null
@@ -33,7 +33,7 @@ export const ChannelListItem: React.FC<PropsType> = (props) => {
             <ChannelName> {props.IsChannel && <NotificationOutlined/>} {props.ChannelName} </ChannelName>
             <LastData>
                 <LastMessageData>
-                    {props.LastMessageData}
+                    {props.LastMessageDate}
                 </LastMessageData>
             </LastData>
             <LastMessage style={props.IsArchived? {color: 'black', fontWeight: 600}: undefined}>

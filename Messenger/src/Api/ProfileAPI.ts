@@ -28,5 +28,4 @@ export const profileAPI = {
         })
         return response
     },
-
 }

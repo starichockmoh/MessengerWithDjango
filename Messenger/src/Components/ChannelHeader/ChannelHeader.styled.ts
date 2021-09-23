@@ -7,6 +7,7 @@ export const HeaderBlock = styled("div")`
   grid-template-columns: 1fr 1fr;
   border-left: 0.5px solid #CDC5BF;
   border-right: 0.5px solid #CDC5BF;
+  
 `
 
 export const Name = styled("div")`

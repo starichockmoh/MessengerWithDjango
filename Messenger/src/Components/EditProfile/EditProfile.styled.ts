@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import {Button, Image} from "antd";
-import {PhoneOutlined, UserOutlined,MailOutlined} from "@ant-design/icons";
+import {PhoneOutlined, UserOutlined,MailOutlined, LoadingOutlined} from "@ant-design/icons";
 
 export const EditProfileBlock = styled("div")`
   position: absolute;
@@ -66,6 +66,11 @@ export const PhoneIcon = styled(PhoneOutlined)`
 export const UserNameIcon = styled(MailOutlined)`
   font-size: 20px;
   color: gray;
+  margin-top: 15%;
+`
+export const LoadingIcon = styled(LoadingOutlined)`
+  font-size: 20px;
+  color: #08c;
   margin-top: 15%;
 `
 

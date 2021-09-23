@@ -28,7 +28,7 @@ export const ChannelInput:React.FC = () => {
             <Button icon={<DownOutlined/>} type={"link"}>{CurrentList === "CHANNELS"? "Channels": 'Dialogs' }</Button>
         </Dropdown>
         <ChannelInputSearch allowClear={SearchStatus === 'Focus'} SearchStatus = {SearchStatus}
-                            placeholder={'Хуй'} onFocus ={() => SetSearchStatus('Focus')}
+                            placeholder={'Search...'} onFocus ={() => SetSearchStatus('Focus')}
                              onBlur={() => SetSearchStatus(null)}/>
     </SearchBlock>
 }

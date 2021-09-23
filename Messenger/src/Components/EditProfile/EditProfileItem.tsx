@@ -1,11 +1,12 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
-import {Chapter, EditItem, EditUserName, NameIcon} from "./EditProfile.styled"
+import {Chapter, EditItem, EditUserName, LoadingIcon} from "./EditProfile.styled"
 import {EditIcon} from "../Contacts/Contacts.styled";
 import {Button, Input} from "antd";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {ActivateProfileSaga} from "../../Redux/Sagas/ProfileSaga";
 import {SpecialLine} from "../Common/CommonElements.styled";
 import TextArea from "antd/es/input/TextArea";
+import {AppStateType} from "../../Redux/Store";
 
 type PropsType = {
     InitialValue: string
@@ -18,6 +19,7 @@ export const EditProfileItem: React.FC<PropsType> = ({Icon, FormName, InitialVal
     const [value, SetValue] = useState('')
     const [IsMouseOn, SetMouseOn] = useState(false)
     const [IsEditMode, SetEditMode] = useState(false)
+    const IsFetching = useSelector((state: AppStateType) => state.Profile.IsFetching)
 
     useEffect(() => {
         SetValue(InitialValue)
@@ -54,6 +56,7 @@ export const EditProfileItem: React.FC<PropsType> = ({Icon, FormName, InitialVal
     if (FormName === "about_user") {
         return <div>
             <SpecialLine/>
+            {IsFetching && <LoadingIcon/>}
             <div>
                 <TextArea style={{marginRight: 10}} value={value} onChange={onChangeValue}
                           onFocus={() => SetEditMode(true)}
@@ -71,7 +74,7 @@ export const EditProfileItem: React.FC<PropsType> = ({Icon, FormName, InitialVal
     }
 
     return <EditItem onMouseOver={() => SetMouseOn(true)} onMouseLeave={() => SetMouseOn(false)}>
-        <Icon/>
+        {IsFetching? <LoadingIcon/> : <Icon/>}
         <div>
             <EditUserName onClick={() => SetEditMode(true)} onBlur={CompleteForm}>
                 {IsEditMode ? <Input autoFocus={true} value={value} onChange={onChangeValue}/> : InitialValue}

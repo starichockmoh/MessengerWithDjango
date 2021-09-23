@@ -17,6 +17,8 @@ export const SearchBlock = styled('div')`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 20vw;
+  overflow-x: hidden;
   button{
     color: black;
   }

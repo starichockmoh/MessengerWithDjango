@@ -4,7 +4,7 @@ from main.models import AdvUser
 
 class Thread(models.Model):
     push_notification = models.ManyToManyField(AdvUser, related_name='push_notification')
-    archive = models.ManyToManyField(AdvUser, related_name='archive')
+    archive = models.ManyToManyField(AdvUser, related_name='archive', blank=True, null=True)
     participants = models.ManyToManyField(AdvUser)
     deleted = models.ManyToManyField(AdvUser, related_name='deleted')
 
