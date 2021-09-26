@@ -26,6 +26,7 @@ export const ArchivedChannelList: React.FC = () => {
 
     useEffect(() => {
         dispatch(ActivateDialogsSaga.Dialogs(true))
+        dialogsAPI.get_active_dialogs()
     }, [])
 
     const DialogsData = useSelector((state: AppStateType) => state.Dialogs.Dialogs)
