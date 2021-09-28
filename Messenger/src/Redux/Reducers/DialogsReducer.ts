@@ -1,8 +1,9 @@
-import {ActionsType, DialogType} from "../../Types/Types";
+import {ActionsType, DialogDetailsType, DialogType} from "../../Types/Types";
 
 
 const InitialState = {
-    Dialogs: null as null | Array<DialogType>
+    Dialogs: null as null | Array<DialogType>,
+    CurrentDialog: null as null | DialogDetailsType
 }
 
 type InitialStateType = typeof InitialState
@@ -14,6 +15,11 @@ export const DialogsReducer = (state= InitialState, action: DialogsACType):Initi
                 ...state,
                 Dialogs: action.dialogs
             }
+        case "DIALOGS/SET_DETAILS":
+            return {
+                ...state,
+                CurrentDialog: action.details
+            }
 
         default:
             return state
@@ -22,5 +28,6 @@ export const DialogsReducer = (state= InitialState, action: DialogsACType):Initi
 type DialogsACType = ActionsType<typeof DialogsAC>
 
 export const DialogsAC = {
-    SetDialogs: (dialogs: Array<DialogType>) => ({type: "DIALOGS/SET_DIALOGS", dialogs} as const)
+    SetDialogs: (dialogs: Array<DialogType>) => ({type: "DIALOGS/SET_DIALOGS", dialogs} as const),
+    SetDetails: (details: DialogDetailsType) => ({type: "DIALOGS/SET_DETAILS", details} as const),
 }

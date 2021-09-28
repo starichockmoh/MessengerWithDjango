@@ -8,87 +8,67 @@ import topor from "./../../Assets/topor.jpg"
 import screp from "./../../Assets/screp.jpg"
 import archive from "./../../Assets/arc.png"
 import {ChannelsBlock} from "./ChannelList.styled";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../Redux/Store";
 import {dialogsAPI} from "../../Api/DialogsAPI";
+import {ActivateDialogsSaga} from "../../Redux/Sagas/DialogsSaga";
+import {GetPartItem} from "../../Helper Functions/GetPartItem";
+import {ToNiceDate} from "../../Helper Functions/ToNiceDate";
+import {channelAPI} from "../../Api/ChannelAPI";
+import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
 
 
 export const ChannelList: React.FC = () => {
     const CurrentList = useSelector((state: AppStateType) => state.ChannelLists.CurrentList)
+    const CurrentUserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
+    const DialogsData = useSelector((state: AppStateType) => state.Dialogs.Dialogs)
+    const ChannelsData = useSelector((state: AppStateType) => state.ChannelLists.Channels)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        CurrentList === 'DIALOGS' ?
+            dispatch(ActivateDialogsSaga.Dialogs(false))
+            :
+            dispatch(ActivateChannelsSaga.Channels())
+
+    }, [CurrentList])
+
+    const ChannelsItems = ChannelsData?.map(d => <ChannelListItem
+        ChannelPhoto={d.avatar}
+        ChannelName={d.title}
+        LastMessageDate={ToNiceDate(d.get_posts[d.get_posts.length - 1]?.datetime)}
+        LastMessage={{
+            Media: null,
+            Text: d.get_posts[d.get_posts.length - 1]?.text
+        }}
+        MessagesCount={d.get_posts.length}
+        key={d.pk}
+        id = {d.pk}
+        IsChannel={true}/>)
+
+    const DialogsItems = DialogsData?.map(d => <ChannelListItem
+        ChannelPhoto={GetPartItem(d.participants, CurrentUserID, "photo")}
+        ChannelName={GetPartItem(d.participants, CurrentUserID, "name")}
+        LastMessageDate={ToNiceDate(d.get_messeges[d.get_messeges.length - 1]?.datetime)}
+        id = {d.pk}
+        key={d.pk}
+        LastMessage={{
+            Media: null,
+            Text: d.get_messeges[d.get_messeges.length - 1]?.text
+        }}
+        MessagesCount={d.get_messeges.length}
+        IsChannel={false}/>)
+
+
     if (CurrentList === 'CHANNELS') {
         return <ChannelsBlock>
             <ChannelListItem ChannelPhoto={archive} ChannelName={'Archive Chats'}
                              LastMessageDate={''} MessagesCount={390}
                              LastMessage={{Media: null, Text: 'Биржа, Димон, 228клуб, Группа анонимных алкашей'}}
                              IsChannel={false}
-                             IsArchived={true}
-            />
-            <ChannelListItem ChannelPhoto={butil} ChannelName={'Бутылка'}
-                             LastMessageDate={'13:00'} MessagesCount={45}
-                             LastMessage={{Media: 'Video', Text: 'Этим и объясняется почему Лёха решил'}}
-                             IsChannel={true}
-            />
-            <ChannelListItem ChannelPhoto={consta} ChannelName={'1337 Const'}
-                             LastMessageDate={'18:00'} MessagesCount={67}
-                             LastMessage={{
-                                 Media: 'Photo',
-                                 Text: 'В Питере уволили охранников пространства "Севкабель '
-                             }}
-                             IsChannel={true}
-            />
-            <ChannelListItem ChannelPhoto={amds} ChannelName={'AMDWS'}
-                             LastMessageDate={'13:00'} MessagesCount={1000}
-                             LastMessage={{Media: 'Photo', Text: 'как тебе такое, Петар Мартич'}} IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={topor} ChannelName={'Топор 18+'}
-                             LastMessageDate={'18:00'} MessagesCount={4}
-                             LastMessage={{Media: null, Text: 'Власти австралийской Виктории объявили о введении '}}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={screp} ChannelName={'Скрепа'}
-                             LastMessageDate={'13:24'} MessagesCount={7}
-                             LastMessage={{Media: 'Photo', Text: 'Что?'}} IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={butil} ChannelName={'Бутылка'}
-                             LastMessageDate={'13:00'} MessagesCount={45}
-                             LastMessage={{Media: 'Video', Text: 'Этим и объясняется почему Лёха решил'}}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={topor} ChannelName={'Топор 18+'}
-                             LastMessageDate={'18:00'} MessagesCount={4}
-                             LastMessage={{Media: null, Text: 'Власти австралийской Виктории объявили о введении '}}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={screp} ChannelName={'Скрепа'}
-                             LastMessageDate={'13:24'} MessagesCount={7}
-                             LastMessage={{Media: 'Photo', Text: 'Что?'}} IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={butil} ChannelName={'Бутылка'}
-                             LastMessageDate={'13:00'} MessagesCount={45}
-                             LastMessage={{Media: 'Video', Text: 'Этим и объясняется почему Лёха решил'}}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={topor} ChannelName={'Топор 18+'}
-                             LastMessageDate={'18:00'} MessagesCount={4}
-                             LastMessage={{Media: null, Text: 'Власти австралийской Виктории объявили о введении '}}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={screp} ChannelName={'Скрепа'}
-                             LastMessageDate={'13:24'} MessagesCount={7}
-                             LastMessage={{Media: 'Photo', Text: 'Что?'}} IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={butil} ChannelName={'Бутылка'}
-                             LastMessageDate={'13:00'} MessagesCount={45}
-                             LastMessage={{Media: 'Video', Text: 'Этим и объясняется почему Лёха решил'}}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={consta} ChannelName={'1337 Const'}
-                             LastMessageDate={'18:00'} MessagesCount={67}
-                             LastMessage={{
-                                 Media: 'Photo',
-                                 Text: 'В Питере уволили охранников пространства "Севкабель '
-                             }}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={amds} ChannelName={'AMDWS'}
-                             LastMessageDate={'13:00'} MessagesCount={1000}
-                             LastMessage={{Media: 'Photo', Text: 'как тебе такое, Петар Мартич'}} IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={topor} ChannelName={'Топор 18+'}
-                             LastMessageDate={'18:00'} MessagesCount={4}
-                             LastMessage={{Media: null, Text: 'Власти австралийской Виктории объявили о введении '}}
-                             IsChannel={true}/>
-            <ChannelListItem ChannelPhoto={screp} ChannelName={'Скрепа'}
-                             LastMessageDate={'13:24'} MessagesCount={7}
-                             LastMessage={{Media: 'Photo', Text: 'Что?'}} IsChannel={true}/>
+                             IsArchived={true}/>
+            {ChannelsItems}
         </ChannelsBlock>
     } else {
         return <ChannelsBlock>
@@ -98,10 +78,7 @@ export const ChannelList: React.FC = () => {
                              IsChannel={false}
                              IsArchived={true}
             />
-            <ChannelListItem ChannelPhoto={seva} ChannelName={'Всеволод'}
-                             LastMessageDate={'15:42'} MessagesCount={5}
-                             LastMessage={{Media: null, Text: '‼Сегодня стало известно что репер Lil Peep жив.'}}
-                             IsChannel={false}/>
+            {DialogsItems}
         </ChannelsBlock>
     }
 }

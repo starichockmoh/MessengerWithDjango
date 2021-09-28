@@ -44,7 +44,9 @@ export const Menu: React.FC = () => {
             </CustomNavLink>
         </CloseButton>
 
-        {!!UserData && <UserInfo Name={UserData.username} Phone={ToNicePhoneNumber(UserData.telephone)} Avatar={seva}/>}
+        {!!UserData && <UserInfo Name={UserData.username}
+                                 Phone={ToNicePhoneNumber(UserData.telephone)}
+                                 Avatar={UserData.addit_image[UserData.addit_image.length - 1]?.image}/>}
 
         <MenuContent>
             <MenuElement Name={'New Group'} Link={'/settings'} Icon={GroupIcon}/>
