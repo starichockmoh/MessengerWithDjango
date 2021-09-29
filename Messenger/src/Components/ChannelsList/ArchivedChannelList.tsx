@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {ChannelListItem} from "./ChannelListItem/ChannelListItem";
 import butil from "./../../Assets/photo_2020-07-20_12-54-28.jpg"
 import seva from "./../../Assets/photo_2017-11-03_18-44-32.jpg"
@@ -15,6 +15,8 @@ import {AppStateType} from "../../Redux/Store";
 import {ToNiceDate} from "../../Helper Functions/ToNiceDate";
 import {ParticipantType} from "../../Types/Types";
 import {GetPartItem} from "../../Helper Functions/GetPartItem";
+import {ChannelListsAC} from "../../Redux/Reducers/ChannelListsReducer";
+import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
 
 
 export const ArchivedChannelList: React.FC = () => {
@@ -24,9 +26,16 @@ export const ArchivedChannelList: React.FC = () => {
         dispatch(ActivateDialogsSaga.Dialogs(true))
     }, [])
 
+    const CurrentDialogID = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.pk)
     const CurrentUserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
-
     const DialogsData = useSelector((state: AppStateType) => state.Dialogs.Dialogs)
+    const CurrentListState = useSelector((state: AppStateType) => state.ChannelLists.CurrentList)
+
+    const GoBack = () => {
+        CurrentListState === "DIALOGS" ?
+            dispatch(ActivateDialogsSaga.Dialogs(false))
+            : dispatch(ActivateChannelsSaga.Channels())
+    }
 
 
     const DialogsItems = DialogsData?.map(d => <ChannelListItem
@@ -39,13 +48,14 @@ export const ArchivedChannelList: React.FC = () => {
         }}
         MessagesCount={d.get_messeges.length}
         id={d.pk}
+        IsActive={d.pk === CurrentDialogID}
         key={d.pk}
         IsChannel={false}/>)
 
     return <ArchivedChannelsBlock>
         <ArchivedChannelsHeader>
             <NavLink to={''}>
-                <BackButton type={"link"} icon={<ArrowLeftOutlined/>}/>
+                <BackButton onClick={GoBack} type={"link"} icon={<ArrowLeftOutlined/>}/>
             </NavLink>
             <div>
                 Archived Chats

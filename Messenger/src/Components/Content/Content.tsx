@@ -12,7 +12,8 @@ import {ContentAC, ContentStateType} from "../../Redux/Reducers/ContentReducer";
 import {ToNiceDate} from "../../Helper Functions/ToNiceDate";
 import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
 import {ActivateDialogsSaga} from "../../Redux/Sagas/DialogsSaga";
-import App from "../../App";
+import {ChannelListsAC} from "../../Redux/Reducers/ChannelListsReducer"
+const {SetList} = ChannelListsAC
 
 
 export const ContentBlock: React.FC = () => {
@@ -26,8 +27,10 @@ export const ContentBlock: React.FC = () => {
         const StorageChannelID = sessionStorage.getItem('CurrentChannelID')
         const StorageDialogID = sessionStorage.getItem('CurrentDialogID')
         if (StorageChannelID) {
+            dispatch(SetList("CHANNELS"))
             dispatch(ActivateChannelsSaga.Details(Number(StorageChannelID)))
         } else if (StorageDialogID) {
+            dispatch(SetList("DIALOGS"))
             dispatch(ActivateDialogsSaga.Details(Number(StorageDialogID)))
         }
     }, [])

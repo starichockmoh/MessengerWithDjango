@@ -38,6 +38,7 @@ export function* WatchChannelDetailsSaga() {
             if (data.status < 300) {
                 sessionStorage.removeItem('CurrentDialogID')
                 sessionStorage.setItem('CurrentChannelID', String(ID))
+                yield put(DialogsAC.SetDetails(null))
                 yield put(ChannelListsAC.SetDetails(data.data))
                 yield put(ContentAC.SetContentState("POSTS"))
             }

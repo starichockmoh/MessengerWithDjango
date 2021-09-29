@@ -28,6 +28,7 @@ type PropsType = {
     IsChannel: boolean
     IsArchived?: true
     id?: number
+    IsActive?: boolean
 }
 
 export const ChannelListItem: React.FC<PropsType> = (props) => {
@@ -43,7 +44,7 @@ export const ChannelListItem: React.FC<PropsType> = (props) => {
     }
 
     return <NavLink to={props.IsArchived? '/archived_chats': '#'}>
-        <ListItem onClick={SetDetails}>
+        <ListItem onClick={SetDetails} active = {props.IsActive}>
             <ChannelAvatar src={props.ChannelPhoto}/>
             <ChannelName> {props.IsChannel && <NotificationOutlined/>} {props.ChannelName} </ChannelName>
             <LastData>

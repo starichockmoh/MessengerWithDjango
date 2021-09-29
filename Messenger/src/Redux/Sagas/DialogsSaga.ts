@@ -1,10 +1,10 @@
-import {call, put, SagaReturnType, take, takeEvery} from "redux-saga/effects";
-import {profileAPI} from "../../Api/ProfileAPI";
-import {ProfileAC} from "../Reducers/ProfileReducer";
-import {ChangedProfileType} from "../../Types/Types";
+import {call, put, SagaReturnType, take, select} from "redux-saga/effects";
 import {dialogsAPI} from "../../Api/DialogsAPI";
 import {DialogsAC} from "../Reducers/DialogsReducer";
 import {ContentAC} from "../Reducers/ContentReducer";
+import {ChannelListsAC} from "../Reducers/ChannelListsReducer";
+import {AppStateType} from "../Store";
+import {profileAPI} from "../../Api/ProfileAPI";
 
 
 export const ActivateDialogsSaga = {
@@ -33,6 +33,7 @@ export function* WatchDialogsSaga() {
 }
 
 type DialogsDetailsType = SagaReturnType<typeof dialogsAPI.get_details>
+type DialogsUserType = SagaReturnType<typeof profileAPI.get_profile>
 
 export function* WatchDialogsDetailsSaga() {
     while (true) {
@@ -42,8 +43,13 @@ export function* WatchDialogsDetailsSaga() {
             if (data.status < 300) {
                 sessionStorage.removeItem('CurrentChannelID')
                 sessionStorage.setItem('CurrentDialogID', String(ID))
+                const CurrentUserID: number = yield select((state: AppStateType) => state.Profile.AuthProfile?.pk)
                 yield put(DialogsAC.SetDetails(data.data))
                 yield put(ContentAC.SetContentState("MESSAGES"))
+                yield put(ChannelListsAC.SetDetails(null))
+                const DialogUserID = data.data.participants[0].pk !== CurrentUserID? data.data.participants[0].pk: data.data.participants[1].pk
+                const DialogUser: DialogsUserType = yield call(profileAPI.get_profile, DialogUserID)
+                yield put(DialogsAC.SetDialogUser(DialogUser.data))
             }
         } catch (error) {
             console.log(error)
