@@ -50,6 +50,7 @@ export const ContentBlock: React.FC = () => {
         Date={ToNiceDate(m.datetime)}
         IsFriend={m.sender !== CurrentUserID}
         Text={m.text}
+        Media={{photo: m.get_images.length ? m.get_images[0].image: ''}}
     />)
 
     switch (ContentState) {
@@ -59,41 +60,18 @@ export const ContentBlock: React.FC = () => {
         case "MESSAGES": {
             return <ContentWrapper>
                 {MessagesItems}
-                <Message Date={'13:00'} IsFriend={true} Text={'Hello my friend'}/>
-                <Message Date={'13:01'} IsFriend={true} Text={'How are you'}/>
-                <Message Date={'13:04'} IsFriend={false} Text={'Hello!!!!'}/>
-                <Message Date={'14:09'} IsFriend={false} Text={'Im OKK how you??'}/>
-                <Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'}/>
-                <Message Date={'13:00'} IsFriend={true} Text={'Hello my friend'}/>
-                <Message Date={'13:01'} IsFriend={true}
-                         Text={'How are youооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооооо'}/>
-                <Message Date={'13:04'} IsFriend={false}
-                         Text={'ow aow areow are youоооооооооооооо youооооооооооооооre yoow are youооооооооооооооuow are youоооооооооооооооооооооооооооо'}/>
-                <Message Date={'14:09'} IsFriend={false} Text={'Im OKK how you??'}/>
-                <Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'}/>
-                <Message Date={'13:00'} IsFriend={true} Text={'Hello my friend'}/>
-                <Message Date={'13:01'} IsFriend={true} Text={'How are you'}/>
-                <Message Date={'13:04'} IsFriend={false} Text={'Hello!!!!'}/>
-                <Message Date={'14:09'} IsFriend={false} Text={'Im OKK how you??'}/>
-                <Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'}/>
-                <Message Date={'13:00'} IsFriend={true} Text={'Hello my friend'}/>
-                <Message Date={'13:01'} IsFriend={true} Text={'How are you'}/>
-                <Message Date={'13:04'} IsFriend={false} Text={'Hello!!!!'}/>
-                <Message Date={'14:09'} IsFriend={false} Text={'Im OKK how you??'}/>
-                <Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'}/>
                 <Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'} Media={{photo: photo}}/>
                 <Message Date={'14:15'} IsFriend={false} Text={'Thank fuckkk yupuuu'} Media={{photo: photo1}}/>
             </ContentWrapper>
         }
         case "POSTS": {
             return <ContentWrapper>
-                <Button type={"link"} onClick={() => SetContentState("MESSAGES")}>Messages</Button>
                 {PostsItems}
             </ContentWrapper>
         }
         default :
-            return <div>
-                Change dialog
+            return <div style={{margin: 5}}>
+                Choose dialog
             </div>
     }
 }

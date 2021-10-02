@@ -1,4 +1,4 @@
-import {ActionsType, DialogDetailsType, DialogType, UserProfileType} from "../../Types/Types";
+import {ActionsType, DialogDetailsType, DialogType, MessageType, UserProfileType} from "../../Types/Types";
 
 
 const InitialState = {
@@ -26,6 +26,20 @@ export const DialogsReducer = (state= InitialState, action: DialogsACType):Initi
                 ...state,
                 DialogUser: action.user
             }
+        case "DIALOGS/SET_MESSAGE":
+            if (!!state.CurrentDialog) {
+                const Dialog: DialogDetailsType = {
+                    get_messeges: [...state.CurrentDialog.get_messeges, action.message],
+                    pk: state.CurrentDialog.pk,
+                    participants: state.CurrentDialog.participants,
+                    archive: state.CurrentDialog.archive,
+                    deleted: state.CurrentDialog.deleted,
+                    push_notification: state.CurrentDialog.push_notification
+                }
+                return {...state, CurrentDialog: Dialog}
+            }
+            return state
+
         default:
             return state
     }
@@ -33,7 +47,8 @@ export const DialogsReducer = (state= InitialState, action: DialogsACType):Initi
 type DialogsACType = ActionsType<typeof DialogsAC>
 
 export const DialogsAC = {
-    SetDialogs: (dialogs: Array<DialogType> ) => ({type: "DIALOGS/SET_DIALOGS", dialogs} as const),
+    SetDialogs: (dialogs: Array<DialogType> | null ) => ({type: "DIALOGS/SET_DIALOGS", dialogs} as const),
     SetDetails: (details: DialogDetailsType | null) => ({type: "DIALOGS/SET_DETAILS", details} as const),
     SetDialogUser: (user: UserProfileType | null) => ({type: "DIALOGS/SET_DIALOG_USER", user} as const),
+    SetMessage: (message: MessageType) => ({type: "DIALOGS/SET_MESSAGE", message} as const),
 }

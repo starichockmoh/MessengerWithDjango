@@ -26,16 +26,6 @@ type PropsType = {
 }
 
 export const ChannelData: React.FC<PropsType> = ({ChangePage}) => {
-    const [CurrentContent, SetContent] = useState<null | 'DIALOG' | 'CHANNEL'>(null)
-    useEffect(() => {
-        const ChannelID = sessionStorage.getItem('CurrentChannelID')
-        const DialogID = sessionStorage.getItem('CurrentDialogID')
-        if (ChannelID) {
-            SetContent('CHANNEL')
-        } else {
-            SetContent('DIALOG')
-        }
-    }, [])
     const DialogData = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog)
     const ChannelData = useSelector((state: AppStateType) => state.ChannelLists.CurrentChannel)
     const DialogUser = useSelector((state: AppStateType) => state.Dialogs.DialogUser)

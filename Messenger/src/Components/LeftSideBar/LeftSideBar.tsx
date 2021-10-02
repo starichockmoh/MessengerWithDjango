@@ -10,6 +10,7 @@ import {Contacts} from "../Contacts/Contacts";
 import {EditProfile} from "../EditProfile/EditProfile";
 import {ArchivedChannelList} from "../ChannelsList/ArchivedChannelList";
 import {Exit} from "../Exit/Exit";
+import {CreateChannelPage} from "../CreateChannelPage/CreateChannelPage";
 
 export const LeftSideBar: React.FC = () => {
     const history = useHistory()
@@ -37,6 +38,9 @@ export const LeftSideBar: React.FC = () => {
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="archived_chats"} classNames={'sideBar'} timeout={300}>
             <ArchivedChannelList/>
+        </CSSTransition>
+        <CSSTransition unmountOnExit in={CurrentPage==="new_channel"} classNames={'sideBar'} timeout={300}>
+            <CreateChannelPage/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="exit"} classNames={'sideBar'} timeout={300}>
            <Exit/>

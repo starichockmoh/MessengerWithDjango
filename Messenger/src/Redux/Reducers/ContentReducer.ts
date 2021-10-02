@@ -44,5 +44,5 @@ export const ContentAC = {
     SetMessages: (messages: Array<MessageType>) => ({type: "CONTENT/SET_MESSAGES", messages} as const),
     SetPosts: (posts: Array<PostType>) => ({type: "CONTENT/SET_POSTS", posts} as const),
     SetComments: (comments: Array<CommentType>) => ({type: "CONTENT/SET_COMMENTS", comments} as const),
-    SetContentState: (state: ContentStateType) => ({type: "CONTENT/SET_STATE", state} as const),
+    SetContentState: (state: ContentStateType | null) => ({type: "CONTENT/SET_STATE", state} as const),
 }

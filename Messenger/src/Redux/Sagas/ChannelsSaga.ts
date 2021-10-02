@@ -9,6 +9,9 @@ import {ContentAC} from "../Reducers/ContentReducer";
 export const ActivateChannelsSaga = {
     Channels: () => ({type: "CHANNELS_SAGAS/GET_CHANNELS"} as const),
     Details: (ID: number) => ({type: "CHANNELS_SAGAS/GET_DETAILS", ID} as const),
+    CreateChannel: (avatar: any, title: string, description: string) =>
+        ({type: "CHANNELS_SAGAS/CREATE_CHANNEL", avatar, title, description} as const),
+    CreatePost: (text: string, channel: number) => ({type: "CHANNELS_SAGAS/CREATE_POST", text, channel} as const),
 
 }
 
@@ -41,6 +44,50 @@ export function* WatchChannelDetailsSaga() {
                 yield put(DialogsAC.SetDetails(null))
                 yield put(ChannelListsAC.SetDetails(data.data))
                 yield put(ContentAC.SetContentState("POSTS"))
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+type CreateChannelActionType = {
+    avatar: any
+    title: string
+    description: string
+}
+type NewChannelType = SagaReturnType<typeof channelAPI.create_channel>
+export function* WatchCreateChannelSaga() {
+    while (true) {
+        const {description, title, avatar}: CreateChannelActionType = yield take("CHANNELS_SAGAS/CREATE_CHANNEL")
+        try {
+            const data: NewChannelType = yield call(channelAPI.create_channel, avatar, title, description )
+            if (data.status < 300) {
+                yield put(ChannelListsAC.SetChannelCreated(true))
+                yield put(ChannelListsAC.SetNewChannel(data.data))
+                yield put(ChannelListsAC.SetChannelCreated(false))
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+type CreatePostActionType = {
+   text: string
+    channel: number
+}
+type NewPostType = SagaReturnType<typeof channelAPI.create_post>
+export function* WatchCreatePostSaga() {
+    while (true) {
+        const {text, channel}: CreatePostActionType = yield take("CHANNELS_SAGAS/CREATE_POST")
+        try {
+            const data: NewPostType = yield call(channelAPI.create_post, text, channel)
+            if (data.status < 300) {
+                yield put(ChannelListsAC.SetPostCreated(true))
+                yield put(ChannelListsAC.SetNewPost(data.data))
+                yield put(ActivateChannelsSaga.Channels())
+                yield put(ChannelListsAC.SetPostCreated(false))
             }
         } catch (error) {
             console.log(error)

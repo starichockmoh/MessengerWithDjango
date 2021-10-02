@@ -10,8 +10,13 @@ import {AuthSagaWorker, WatchAuthSaga, WatchLoginSaga, WatchLogoutSaga} from "./
 import {ProfileReducer} from "./Reducers/ProfileReducer";
 import {WatchProfileChangeSaga, WatchProfileSaga} from "./Sagas/ProfileSaga";
 import {DialogsReducer} from "./Reducers/DialogsReducer";
-import {WatchDialogsDetailsSaga, WatchDialogsSaga} from "./Sagas/DialogsSaga";
-import {WatchChannelDetailsSaga, WatchChannelsSaga} from "./Sagas/ChannelsSaga";
+import {WatchDialogsDetailsSaga, WatchDialogsSaga, WatchSendMessageSaga} from "./Sagas/DialogsSaga";
+import {
+    WatchChannelDetailsSaga,
+    WatchChannelsSaga,
+    WatchCreateChannelSaga,
+    WatchCreatePostSaga
+} from "./Sagas/ChannelsSaga";
 import {ContentReducer} from "./Reducers/ContentReducer";
 
 
@@ -45,7 +50,10 @@ function* rootSaga() {
         spawn(WatchDialogsSaga),
         spawn(WatchChannelsSaga),
         spawn(WatchChannelDetailsSaga),
-        spawn(WatchDialogsDetailsSaga)
+        spawn(WatchDialogsDetailsSaga),
+        spawn(WatchSendMessageSaga),
+        spawn(WatchCreateChannelSaga),
+        spawn(WatchCreatePostSaga)
     ])
 }
 sagaMiddleware.run(rootSaga)

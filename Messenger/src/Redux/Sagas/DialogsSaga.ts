@@ -10,6 +10,7 @@ import {profileAPI} from "../../Api/ProfileAPI";
 export const ActivateDialogsSaga = {
     Dialogs: (is_archive: boolean) => ({type: "DIALOGS_SAGAS/GET_DIALOGS", is_archive} as const),
     Details: (ID: number) => ({type: "DIALOGS_SAGAS/GET_DETAILS", ID} as const),
+    SendMessage: (dialogID: number, text: string) => ({type: "DIALOGS_SAGAS/SEND_MESSAGE", dialogID, text} as const),
 
 }
 
@@ -37,7 +38,7 @@ type DialogsUserType = SagaReturnType<typeof profileAPI.get_profile>
 
 export function* WatchDialogsDetailsSaga() {
     while (true) {
-        const {ID}: {ID: number} = yield take("DIALOGS_SAGAS/GET_DETAILS")
+        const {ID}: { ID: number } = yield take("DIALOGS_SAGAS/GET_DETAILS")
         try {
             const data: DialogsDetailsType = yield call(dialogsAPI.get_details, ID)
             if (data.status < 300) {
@@ -47,10 +48,27 @@ export function* WatchDialogsDetailsSaga() {
                 yield put(DialogsAC.SetDetails(data.data))
                 yield put(ContentAC.SetContentState("MESSAGES"))
                 yield put(ChannelListsAC.SetDetails(null))
-                const DialogUserID = data.data.participants[0].pk !== CurrentUserID? data.data.participants[0].pk: data.data.participants[1].pk
+                const DialogUserID = data.data.participants[0].pk !== CurrentUserID ? data.data.participants[0].pk : data.data.participants[1].pk
                 const DialogUser: DialogsUserType = yield call(profileAPI.get_profile, DialogUserID)
                 yield put(DialogsAC.SetDialogUser(DialogUser.data))
             }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+type SendMessageResType = SagaReturnType<typeof dialogsAPI.send_message>
+type SendMessageActionType = {
+    dialogID: number
+    text: string
+}
+export function* WatchSendMessageSaga() {
+    while (true) {
+        try {
+            const {dialogID, text} : SendMessageActionType = yield take("DIALOGS_SAGAS/SEND_MESSAGE")
+            const data: SendMessageResType = yield call(dialogsAPI.send_message, dialogID, text)
+            yield put(DialogsAC.SetMessage(data.data))
         } catch (error) {
             console.log(error)
         }

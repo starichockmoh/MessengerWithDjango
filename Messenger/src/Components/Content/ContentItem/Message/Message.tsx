@@ -17,7 +17,7 @@ export const Message: React.FC<PropsType> = ({Media, Text, Date, IsFriend}) => {
                 {Text}
                 {Media? Media.photo && <Image src={Media.photo}/> : null }
             </MessageInfo>
-            {!Media &&
+            {!Media?.photo &&
             <MessageData>
                 {Date}
                 {!IsFriend && <TickIcon/>}

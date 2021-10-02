@@ -54,10 +54,17 @@ export type DialogType = {
     push_notification: Array<number>
 }
 
+export type MessageImageType = {
+    id: number
+    image: string
+    message: any
+    sender: number
+    thread: number
+}
 
 export type MessageType = {
     datetime: string
-    get_images: []
+    get_images: Array<MessageImageType>
     pk: number
     sender: number
     text: string
