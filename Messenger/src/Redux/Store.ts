@@ -10,7 +10,14 @@ import {AuthSagaWorker, WatchAuthSaga, WatchLoginSaga, WatchLogoutSaga} from "./
 import {ProfileReducer} from "./Reducers/ProfileReducer";
 import {WatchProfileChangeSaga, WatchProfileSaga} from "./Sagas/ProfileSaga";
 import {DialogsReducer} from "./Reducers/DialogsReducer";
-import {WatchDialogsSaga} from "./Sagas/DialogsSaga";
+import {WatchDialogsDetailsSaga, WatchDialogsSaga, WatchSendMessageSaga} from "./Sagas/DialogsSaga";
+import {
+    WatchChannelDetailsSaga,
+    WatchChannelsSaga,
+    WatchCreateChannelSaga,
+    WatchCreatePostSaga
+} from "./Sagas/ChannelsSaga";
+import {ContentReducer} from "./Reducers/ContentReducer";
 
 
 
@@ -20,7 +27,8 @@ const MainReducer = combineReducers({
     ChannelLists: ChannelListsReducer,
     Auth: AuthReducer,
     Profile: ProfileReducer,
-    Dialogs: DialogsReducer
+    Dialogs: DialogsReducer,
+    Content: ContentReducer
 })
 
 export type AppStateType = ReturnType<typeof MainReducer>
@@ -39,7 +47,13 @@ function* rootSaga() {
         spawn(WatchLogoutSaga),
         spawn(WatchProfileSaga),
         spawn(WatchProfileChangeSaga),
-        spawn(WatchDialogsSaga)
+        spawn(WatchDialogsSaga),
+        spawn(WatchChannelsSaga),
+        spawn(WatchChannelDetailsSaga),
+        spawn(WatchDialogsDetailsSaga),
+        spawn(WatchSendMessageSaga),
+        spawn(WatchCreateChannelSaga),
+        spawn(WatchCreatePostSaga)
     ])
 }
 sagaMiddleware.run(rootSaga)

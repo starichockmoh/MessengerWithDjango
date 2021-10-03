@@ -44,11 +44,13 @@ export const Menu: React.FC = () => {
             </CustomNavLink>
         </CloseButton>
 
-        {!!UserData && <UserInfo Name={UserData.username} Phone={ToNicePhoneNumber(UserData.telephone)} Avatar={seva}/>}
+        {!!UserData && <UserInfo Name={UserData.username}
+                                 Phone={ToNicePhoneNumber(UserData.telephone)}
+                                 Avatar={UserData.addit_image[UserData.addit_image.length - 1]?.image}/>}
 
         <MenuContent>
             <MenuElement Name={'New Group'} Link={'/settings'} Icon={GroupIcon}/>
-            <MenuElement Name={'New Channel'} Link={'/settings'} Icon={ChannelIcon}/>
+            <MenuElement Name={'New Channel'} Link={'/new_channel'} Icon={ChannelIcon}/>
             <MenuElement Name={'Contacts'} Link={'/contacts'} Icon={ContactsIcon}/>
             <MenuElement Name={'Calls'} Link={'/calls'} Icon={CallsIcon}/>
             <MenuElement Name={'Settings'} Link={'/settings'} Icon={SettingsIcon}/>

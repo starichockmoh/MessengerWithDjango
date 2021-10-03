@@ -6,7 +6,8 @@ export const DescriptionBlock = styled("div")`
   display: grid;
   padding-right: 10%;
   grid-template-columns: 1fr 4fr;
-  grid-template-rows: 5fr 0.5fr 0.5fr;
+  grid-template-rows: 5fr 0.5fr 0.5fr 0.5fr;
+  grid-gap: 5px;
 `
 
 export const IconBlock = styled("div")`

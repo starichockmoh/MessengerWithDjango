@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     AddInfoBlock, AudioIcon, FilesIcon, IconBlock, ImageIcon,
     InfoTitle,
@@ -16,6 +16,9 @@ import {SpecialLine} from "../../Common/CommonElements.styled";
 import {StyledComponent} from "styled-components";
 import {numberWithSpaces} from "../../../Helper Functions/ToNiceNumber";
 import {DialogOptions} from "./Options/DialigOptions";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../../Redux/Store";
+import {ToNicePhoneNumber} from "../../../Helper Functions/ToNicePhoneNumber";
 
 type PropsType = {
     ChangePage: (page: ChannelInfoPageType) => void
@@ -23,34 +26,44 @@ type PropsType = {
 }
 
 export const ChannelData: React.FC<PropsType> = ({ChangePage}) => {
-    let text = 'Канал патриархальных констерваторов\n' +
-        '\n' +
-        'По всем вопросам:\n' +
-        '@shatatel_skrep\n' +
-        '(@SvaroGG_WP, @dedrov2000, @ovent18, \n' +
-        '@eduardnefascist)\n' +
-        '\n' +
-        'Рекламный менеджер: \n' +
-        '@robertzzapusk\n' +
-        '\n' +
-        'Чат - t.me/joinchat/VenLIrtIhfrioKBN'
+    const DialogData = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog)
+    const ChannelData = useSelector((state: AppStateType) => state.ChannelLists.CurrentChannel)
+    const DialogUser = useSelector((state: AppStateType) => state.Dialogs.DialogUser)
+
+    const AvatarsLen = DialogUser?.addit_image.length
 
     return <ChannelInfoBlock>
-        <TitleElement AddInfo={24000} IsChannel={true} Name={'1337 const'} Avatar={consta}/>
+        <TitleElement
+            AddInfo={DialogData && DialogUser? DialogUser.friends.length : ChannelData? ChannelData.participents.length : 111}
+            IsChannel={!!ChannelData}
+            Name={DialogData && DialogUser ? DialogUser.username : ChannelData ? ChannelData.title : ''}
+            Avatar={DialogData && DialogUser && AvatarsLen
+                ? DialogUser.addit_image[AvatarsLen - 1].image
+                : ChannelData ? ChannelData.avatar : ''}/>
         <SpecialLine/>
-        <Description isAdmin={true} isChannel={true} ChannelInfo={{Description: text, Link: 't.me/tg13337const'}}/>
-        {/*<Description isChannel={false} UserInfo={{UserName: '@ilisseo', Bio: 'yoy', Mobile: '+7-919-78-21-90'}}/>*/}
+        {ChannelData
+            ? <Description isAdmin={true}
+                         isChannel={true}
+                         ChannelInfo={{Description: ChannelData.description,
+                             Link: 't.me/tg13337const'}}/>
+            : DialogData
+                ? <Description isChannel={false}
+                             UserInfo={{
+                                 UserName: DialogUser ? DialogUser.first_name + ' ' + DialogUser.last_name : '',
+                                 Bio: DialogUser ? DialogUser.about_user : '',
+                                 Mobile: DialogUser ? ToNicePhoneNumber(DialogUser.telephone) : ''
+                             }}/>
+                : null }
         <SpecialLine/>
         <MediaBlock>
             <MediaElement Icon={ImageIcon} Count={'5678 photos'} ChangePage={() => ChangePage('IMAGES')}/>
-            <MediaElement Icon={VideoIcon} Count={'300 videos'}  ChangePage={() => ChangePage('IMAGES')}/>
-            <MediaElement Icon={FilesIcon} Count={'20 audio files'}  ChangePage={() => ChangePage('IMAGES')}/>
-            <MediaElement Icon={AudioIcon} Count={'5678 photos'}  ChangePage={() => ChangePage('IMAGES')}/>
-            <MediaElement Icon={VoiceIcon} Count={'3 voice messages'}  ChangePage={() => ChangePage('IMAGES')}/>
+            <MediaElement Icon={VideoIcon} Count={'300 videos'} ChangePage={() => ChangePage('IMAGES')}/>
+            <MediaElement Icon={FilesIcon} Count={'20 audio files'} ChangePage={() => ChangePage('IMAGES')}/>
+            <MediaElement Icon={AudioIcon} Count={'5678 photos'} ChangePage={() => ChangePage('IMAGES')}/>
+            <MediaElement Icon={VoiceIcon} Count={'3 voice messages'} ChangePage={() => ChangePage('IMAGES')}/>
         </MediaBlock>
         <SpecialLine/>
-        <ChannelOptions/>
-        {/*<DialogOptions/>*/}
+        {ChannelData ? <ChannelOptions/> : DialogData ? <DialogOptions/> : null}
     </ChannelInfoBlock>
 }
 

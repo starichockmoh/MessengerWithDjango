@@ -16,9 +16,11 @@ export const Exit: React.FC = () => {
                 Are you sure?
             </div>
             <div>
-                <Button danger onClick={() => dispatch(ActivateAuthSaga.Logout())}>
-                    YES
-                </Button>
+                <NavLink to={''}>
+                    <Button danger onClick={() => dispatch(ActivateAuthSaga.Logout())}>
+                        YES
+                    </Button>
+                </NavLink>
                 <NavLink to =''>
                     <Button type={'primary'}>NO</Button>
                 </NavLink>

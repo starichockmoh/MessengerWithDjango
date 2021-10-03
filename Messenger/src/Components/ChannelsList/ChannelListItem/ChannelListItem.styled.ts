@@ -5,13 +5,14 @@ import {Avatar, Badge} from "antd";
 export const ListItem = styled("div")`
   padding: 5px;
   display: grid;
+  background: ${(props: {active: boolean | undefined}) => props.active ? '#08c' : 'white'};
   grid-template-areas:
   "ChannelAvatar ChannelName LastData"
   "ChannelAvatar LastMessage MessagesCount";
   grid-template-columns: 1.2fr 5fr 1fr;
   grid-template-rows: 1fr 1fr;
   :hover{
-    background-color: #DCDCDC;
+    background-color: ${(props: {active: boolean | undefined}) => props.active ? '#08c' : '#DCDCDC'};
   }
 `
 

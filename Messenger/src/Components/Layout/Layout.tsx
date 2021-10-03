@@ -7,6 +7,7 @@ import {ChannelFooter} from "../FooterContent/ChannelFooter/ChannelFooter";
 import {DialogInput} from "../FooterContent/DialogFooter/Dialoginput";
 import {ChannelInfo} from "../ChannelInfo/ChannelInfo";
 import {ContentBlock} from "../Content/Content";
+import {FooterComponent} from "../FooterContent/FooterComponent";
 
 
 
@@ -31,7 +32,7 @@ export const Layout: React.FC = () => {
             <ChannelInfo/>
         </Info>
         <Footer>
-            <DialogInput/>
+            <FooterComponent/>
         </Footer>
     </AppLayout>
 }
