@@ -79,7 +79,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'social_network.wsgi.application'
-ASGI_APPLICATION = 'djangochannels.asgi.application'
+ASGI_APPLICATION = 'social_network.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
