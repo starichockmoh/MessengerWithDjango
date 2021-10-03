@@ -34,19 +34,19 @@ class MessageConsumer(AsyncWebsocketConsumer):
         new_message = await self.create_new_message(message)
         data = {
             'author': new_message.author.username,
-            'created_at': new_message.created_at.strftime('%Y-%m-%d %H:%m'),
+            'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),
             'text': new_message.text
         }
 
         await self.channel_layer.group_send(
             self.post_group_name,
             {
-                'type': 'new_comment',
+                'type': 'new_message',
                 'message': data
             }
         )
 
-    async def new_comment(self, event):
+    async def new_message(self, event):
         message = event['message']
 
         await self.send(
@@ -56,9 +56,9 @@ class MessageConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def create_new_comment(self, text):
+    def create_new_message(self, text):
         thread = Thread.objects.get(pk=self.thread_id)
-        new_comment = Message.objects.create(
+        new_message = Message.objects.create(
             author=self.scope['user'],
             text=text,
             thread=thread
