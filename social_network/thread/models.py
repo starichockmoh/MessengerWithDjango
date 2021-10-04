@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.timezone import localtime
+
 from account.models import AdvUser
 
 
@@ -28,6 +30,9 @@ class Message(models.Model):
 
     def get_images(self):
         return self.messegephoto_set.all()
+
+    def __str__(self):
+        str(localtime(self.datetime))
 
     class Meta:
         verbose_name_plural = 'Сообщение'
