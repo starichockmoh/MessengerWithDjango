@@ -13,6 +13,7 @@ import {ToNiceDate} from "../../Helper Functions/ToNiceDate";
 import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
 import {ActivateDialogsSaga} from "../../Redux/Sagas/DialogsSaga";
 import {ChannelListsAC} from "../../Redux/Reducers/ChannelListsReducer"
+import {StartChatSagaActions} from "../../Redux/Sagas/CommentsSaga";
 const {SetList} = ChannelListsAC
 
 
@@ -52,6 +53,14 @@ export const ContentBlock: React.FC = () => {
         Text={m.text}
         Media={{photo: m.get_images.length ? m.get_images[0].image: ''}}
     />)
+    const CommentsArray = useSelector(((state: AppStateType) => state.Comments.Comments))
+    const WSStatus = useSelector(((state: AppStateType) => state.Comments.WSStatus))
+    useEffect(() => {
+        dispatch(StartChatSagaActions.StartWsAC())
+        return () => {
+            dispatch(StartChatSagaActions.CloseWSAC())
+        }
+    }, [dispatch])
 
     switch (ContentState) {
         case "COMMENTS": {
