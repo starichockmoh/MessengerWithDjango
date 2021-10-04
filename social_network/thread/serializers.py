@@ -77,8 +77,9 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 class ThreadListFrontSerializer(serializers.ModelSerializer):
     participants = FriendsListSerializer(many=True, required=False)
     get_messeges = MessegeSerializer(many=True, required=False)
+    deleted = FriendsListSerializer(many=True, required=False)
 
     class Meta:
         model = Thread
-        fields = ['pk', 'participants', 'get_messeges', 'push_notification', 'archive']
+        fields = ['pk', 'participants', 'get_messeges', 'push_notification', 'archive', 'deleted']
         read_only_fields = ['pk', 'archive']

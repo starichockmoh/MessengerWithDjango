@@ -7,6 +7,7 @@ from account.serializers import FriendsListSerializer
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author = FriendsListSerializer()
 
     def create(self, validated_data):
         request = self.context.get("request")
@@ -47,6 +48,7 @@ class PostSerializer(serializers.ModelSerializer):
     # get_image_post = serializers.ImageField(many=True, required=False)
     # get_video_post = serializers.ImageField(many=True, required=False)
     get_comments = CommentSerializer(many=True, required=False)
+    addit_image = PostPhotoSerializer(many=True)
 
     def create(self, validated_data):
         request = self.context.get("request")
@@ -94,6 +96,7 @@ class ChannelDetailSerializer(serializers.ModelSerializer):
     participents = FriendsListSerializer(many=True, required=False)
     admins = FriendsListSerializer(many=True, required=False)
     get_posts = PostSerializer(many=True, required=False)
+    creator = FriendsListSerializer()
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)

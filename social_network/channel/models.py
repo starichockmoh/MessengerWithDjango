@@ -40,7 +40,7 @@ class Post(models.Model):
 
 class ImagePost(models.Model):
     image = models.ImageField(upload_to='images/', verbose_name='Фотография поста')
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Пост')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, verbose_name='Пост', related_name='addit_image')
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE, null=True, blank=True)
     sender = models.ForeignKey(AdvUser, on_delete=models.CASCADE, blank=True, null=True)
 
