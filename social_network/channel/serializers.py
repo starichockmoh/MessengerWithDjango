@@ -48,7 +48,7 @@ class PostSerializer(serializers.ModelSerializer):
     # get_image_post = serializers.ImageField(many=True, required=False)
     # get_video_post = serializers.ImageField(many=True, required=False)
     get_comments = CommentSerializer(many=True, required=False)
-    addit_image = PostPhotoSerializer(many=True)
+    addit_image = PostPhotoSerializer(many=True, required=False)
 
     def create(self, validated_data):
         request = self.context.get("request")
