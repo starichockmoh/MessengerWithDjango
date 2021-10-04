@@ -14,6 +14,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.parsers import MultiPartParser, FileUploadParser
 
 from django.http import Http404
+from django.db.models import Q
 
 
 # Класс для создания диалога но не для просмотра
@@ -32,7 +33,10 @@ class ThreadActiveOfUserFront(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request):
-        threads = Thread.objects.filter(participants__in=[request.user]).exclude(archive__in=[request.user])
+        threads = Thread.objects.filter(participants__in=[request.user]).exclude(
+            Q(archive__in=[request.user]) |
+            Q(deleted__in=[request.user])
+        )
         serializer = ThreadListFrontSerializer(threads, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -41,8 +45,10 @@ class ThreadArchiveOfUserFront(APIView):
     permission_classes = [IsAuthenticated, ]
 
     def get(self, request):
-        threads = Thread.objects.filter(participants__in=[request.user],
-                                        archive__in=[request.user])
+        threads = Thread.objects.filter(
+            Q(participants__in=[request.user]) &
+            Q(archive__in=[request.user])
+        ).exclude(deleted__in=[request.user])
         serializer = ThreadListFrontSerializer(threads, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

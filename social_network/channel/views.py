@@ -22,7 +22,7 @@ class ChannelList(APIView):
     parser_classes = (MultiPartParser, FileUploadParser,)
 
     def get(self, request):
-        channels = Channel.objects.all()
+        channels = Channel.objects.filter(participents__in=[request.user])
         serializer = ChannelListSerializer(channels, many=True)
         return Response({'channels': serializer.data}, status=status.HTTP_200_OK)
 
