@@ -33,7 +33,7 @@ export const ChannelFooter: React.FC<PropsType> = ({ChannelData}) => {
         dispatch(ActivateChannelsSaga.CreatePost(InputValue, ChannelData.id))
         SetInputValue('')
     }
-    const IsAdmin = CurrentUserID ? CurrentUserID === ChannelData.creator || CurrentUserID in AdminsID : false
+    const IsAdmin = CurrentUserID? AdminsID.indexOf(CurrentUserID) >= 0 : false
     if (IsAdmin) return <DialogInputBlock>
         <DialogInputButton type={"link"} icon = {<PaperClipIcon/>}/>
         <DialogTextArea onChange={onInputChange}

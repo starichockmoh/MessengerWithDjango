@@ -23,7 +23,7 @@ export function* WatchLoginSaga() {
             const data: LoginData = yield call(authAPI.login, name, password)
             yield call(() => localStorage.setItem('token', data.data.access))
 
-        } catch (error) {
+        } catch (error: any) {
             yield put(AuthAC.SetError(error.message))
             yield delay(5000)
             yield put(AuthAC.SetError(''))

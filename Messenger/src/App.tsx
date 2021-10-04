@@ -1,16 +1,11 @@
-import React, {StrictMode, useEffect, useState} from "react";
+import React, {StrictMode, useEffect} from "react";
 import {Provider, useDispatch, useSelector} from "react-redux";
 import store, {AppStateType} from "./Redux/Store";
 import {BrowserRouter, withRouter} from "react-router-dom";
 import {Layout} from "./Components/Layout/Layout";
-import {Menu} from "./Components/Menu/Menu";
-import {SettingsPage} from "./Components/Settings/SettingsPage/SettingsPage"
-import {CSSTransition} from "react-transition-group";
 import "./Components/LeftSideBar/AnimationSideBar.css"
 import {LeftSideBar} from "./Components/LeftSideBar/LeftSideBar";
 import {LoginPage} from "./Components/Login/LoginPage";
-import axios from "axios";
-import {authAPI} from "./Api/AuthAPI";
 import {ActivateAuthSaga} from "./Redux/Sagas/AuthSaga";
 
 

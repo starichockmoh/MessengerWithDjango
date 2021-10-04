@@ -18,6 +18,8 @@ import {
     WatchCreatePostSaga
 } from "./Sagas/ChannelsSaga";
 import {ContentReducer} from "./Reducers/ContentReducer";
+import CommentsReducer from "./Reducers/CommentsReducer";
+import {StopWSSagaWatcher, WSSagaWatcher} from "./Sagas/CommentsSaga";
 
 
 
@@ -28,7 +30,8 @@ const MainReducer = combineReducers({
     Auth: AuthReducer,
     Profile: ProfileReducer,
     Dialogs: DialogsReducer,
-    Content: ContentReducer
+    Content: ContentReducer,
+    Comments: CommentsReducer
 })
 
 export type AppStateType = ReturnType<typeof MainReducer>
@@ -53,7 +56,9 @@ function* rootSaga() {
         spawn(WatchDialogsDetailsSaga),
         spawn(WatchSendMessageSaga),
         spawn(WatchCreateChannelSaga),
-        spawn(WatchCreatePostSaga)
+        spawn(WatchCreatePostSaga),
+        spawn(WSSagaWatcher),
+        spawn(StopWSSagaWatcher)
     ])
 }
 sagaMiddleware.run(rootSaga)

@@ -10,6 +10,9 @@ export type AuthUserProfileType = {
     telephone: string
 }
 
+export type WSStatusType =  'OPENED' | 'CLOSED' | 'PENDING' | 'ERROR'
+export type ActionsConstantsType<T extends {[key: string]: (...arg: any[]) => any}> = ActionsType<T> extends {[key: string] : infer U} ? U: never
+
 export type UserProfileType = {
     pk: number
     last_active: null | string
@@ -97,7 +100,6 @@ export type CommentType = {
     id: number
     post: number
     text: string
-
 }
 
 export type ChannelDetailType = {
