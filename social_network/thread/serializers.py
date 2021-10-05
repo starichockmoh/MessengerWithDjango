@@ -26,6 +26,7 @@ class MessegePhotoSerializer(serializers.ModelSerializer):
 
 class MessegeSerializer(serializers.ModelSerializer):
     get_images = MessegePhotoSerializer(many=True, required=False)
+    datetime = serializers.DateTimeField(read_only=True)
 
     def create(self, validated_data):
         request = self.context.get("request")
