@@ -7,14 +7,14 @@ from channels.db import database_sync_to_async
 
 from thread.models import Message, Thread
 
+from thread.views import get_current_user
+
 
 class MessageConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         self.thread_id = self.scope['url_route']['kwargs']['thread_id']
         self.post_group_name = 'thread_%s' % self.thread_id
-        self.user = self.scope['user']
-        print('Self Here: ', self.scope['user'])
 
         await self.channel_layer.group_add(
             self.post_group_name,
@@ -29,12 +29,14 @@ class MessageConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
+    async def receive(self, data):
+        text_data_json = json.loads(data)
         message = text_data_json['text']
-        new_message = await self.create_new_message(message)
+        username = text_data_json['sender']
+        new_message = await self.create_new_message(message, username)
         data = {
-            'author': new_message.author.username,
+            'sender': new_message.sender.username,
+            'avatar': new_message.sender.addit_image[-1],
             'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),
             'text': new_message.text
         }
@@ -57,13 +59,13 @@ class MessageConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def create_new_message(self, text):
+    def create_new_message(self, message, username):
         thread = Thread.objects.get(pk=self.thread_id)
-        # print(self.scope['user'])
+        user = get_current_user(username)
         new_message = Message.objects.create(
-            # sender=self.scope['user'],
-            sender=self.user,
-            text=text,
+            sender=user,
+            text=message,
             thread=thread
         )
+        print(new_message)
         return new_message
