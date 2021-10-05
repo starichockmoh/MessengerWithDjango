@@ -36,7 +36,8 @@ export const DialogInput: React.FC<{DialogID: number}> = () => {
             console.log("OPEN")
         }
         const MessageHandler = (e: MessageEvent) => {
-            dispatch(DialogsAC.SetMessages(e.data))
+            const data = JSON.parse(e.data)
+            dispatch(DialogsAC.SetMessage(data.message))
             console.log(e.data)
 
         }

@@ -102,6 +102,7 @@ export type CommentType = {
     text: string
 }
 
+
 export type ChannelDetailType = {
     admins: Array<ParticipantType>
     creator: number //будет объект

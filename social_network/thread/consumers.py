@@ -39,12 +39,13 @@ class MessageConsumer(AsyncWebsocketConsumer):
         # else:
         #     last_image = new_message.sender.addit_image[0]
 
-        data = json.dumps({
-            'sender': new_message.sender.username,
+        data = {
+            'sender': new_message.sender.pk,
             # 'avatar': new_message.sender.addit_image.all(),
             'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),
-            'text': new_message.text
-        })
+            'text': new_message.text,
+            'message_id': new_message.pk
+        }
 
         await self.channel_layer.group_send(
             self.post_group_name,

@@ -51,7 +51,7 @@ export const ContentBlock: React.FC = () => {
         Date={ToNiceDate(m.datetime)}
         IsFriend={m.sender !== CurrentUserID}
         Text={m.text}
-        Media={{photo: m.get_images.length ? m.get_images[0].image: ''}}
+        // Media={{photo: m.get_images?.length ? m.get_images[0].image: ''}}
     />)
     const DialogID = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.pk)
     //
@@ -71,8 +71,8 @@ export const ContentBlock: React.FC = () => {
         case "MESSAGES": {
             return <ContentWrapper>
                 {MessagesItems}
-                <Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'} Media={{photo: photo}}/>
-                <Message Date={'14:15'} IsFriend={false} Text={'Thank fuckkk yupuuu'} Media={{photo: photo1}}/>
+                {/*<Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'} Media={{photo: photo}}/>*/}
+                {/*<Message Date={'14:15'} IsFriend={false} Text={'Thank fuckkk yupuuu'} Media={{photo: photo1}}/>*/}
             </ContentWrapper>
         }
         case "POSTS": {
