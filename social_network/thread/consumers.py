@@ -33,11 +33,15 @@ class MessageConsumer(AsyncWebsocketConsumer):
         message = text_data_json['text']
         username = text_data_json['sender']
         new_message = await self.create_new_message(message, username)
+        # тест вариант по фотографиям
+        images = json.dumps(new_message.addit_image.all())
         data = {
             'sender': new_message.sender.pk,
             'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),
             'text': new_message.text,
-            'message_id': new_message.pk
+            'message_id': new_message.pk,
+            # тест вариант по фотографиям
+            'images': images
         }
 
         await self.channel_layer.group_send(
