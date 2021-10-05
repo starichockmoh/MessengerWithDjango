@@ -29,8 +29,8 @@ class MessageConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    async def receive(self, data):
-        text_data_json = json.loads(data)
+    async def receive(self, data_message):
+        text_data_json = json.loads(data_message)
         message = text_data_json['text']
         username = text_data_json['sender']
         new_message = await self.create_new_message(message, username)
@@ -49,14 +49,14 @@ class MessageConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    async def new_message(self, event):
-        message = event['message']
-
-        await self.send(
-            text_data=json.dumps({
-                'message': message
-            })
-        )
+    # async def new_message(self, event):
+    #     message = event['message']
+    #
+    #     await self.send(
+    #         text_data=json.dumps({
+    #             'message': message
+    #         })
+    #     )
 
     @database_sync_to_async
     def create_new_message(self, message, username):
@@ -67,5 +67,4 @@ class MessageConsumer(AsyncWebsocketConsumer):
             text=message,
             thread=thread
         )
-        print(new_message)
         return new_message
