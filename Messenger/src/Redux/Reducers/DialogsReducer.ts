@@ -39,6 +39,19 @@ export const DialogsReducer = (state= InitialState, action: DialogsACType):Initi
                 return {...state, CurrentDialog: Dialog}
             }
             return state
+        case "DIALOGS/SET_MESSAGES":
+            if (!!state.CurrentDialog) {
+                const Dialog: DialogDetailsType = {
+                    get_messeges: [...state.CurrentDialog.get_messeges, ...action.messages],
+                    pk: state.CurrentDialog.pk,
+                    participants: state.CurrentDialog.participants,
+                    archive: state.CurrentDialog.archive,
+                    deleted: state.CurrentDialog.deleted,
+                    push_notification: state.CurrentDialog.push_notification
+                }
+                return {...state, CurrentDialog: Dialog}
+            }
+            return state
 
         default:
             return state
@@ -51,4 +64,5 @@ export const DialogsAC = {
     SetDetails: (details: DialogDetailsType | null) => ({type: "DIALOGS/SET_DETAILS", details} as const),
     SetDialogUser: (user: UserProfileType | null) => ({type: "DIALOGS/SET_DIALOG_USER", user} as const),
     SetMessage: (message: MessageType) => ({type: "DIALOGS/SET_MESSAGE", message} as const),
+    SetMessages: (messages: Array<MessageType>) =>  ({type: "DIALOGS/SET_MESSAGES", messages} as const),
 }

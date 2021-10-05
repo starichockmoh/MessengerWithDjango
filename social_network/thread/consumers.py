@@ -13,6 +13,8 @@ class MessageConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.thread_id = self.scope['url_route']['kwargs']['thread_id']
         self.post_group_name = 'thread_%s' % self.thread_id
+        self.user = self.scope['user']
+        print('Self Here: ', self.scope['user'])
 
         await self.channel_layer.group_add(
             self.post_group_name,
@@ -30,7 +32,6 @@ class MessageConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['text']
-        print('recive', message)
         new_message = await self.create_new_message(message)
         data = {
             'author': new_message.author.username,
@@ -58,11 +59,11 @@ class MessageConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def create_new_message(self, text):
         thread = Thread.objects.get(pk=self.thread_id)
-        print(self.scope['user'])
+        # print(self.scope['user'])
         new_message = Message.objects.create(
-            sender=self.scope['user'],
+            # sender=self.scope['user'],
+            sender=self.user,
             text=text,
             thread=thread
         )
-        print(new_message)
         return new_message
