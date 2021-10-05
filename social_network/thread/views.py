@@ -1,11 +1,13 @@
 from thread.models import Thread, Message, MessegePhoto
-
 from thread.serializers import (ThreadListSerializer,
                                 MessegeSerializer,
                                 ThreadDetailSerializer,
                                 MessegePhotoSerializer,
                                 ThreadListFrontSerializer
                                 )
+
+from account.models import AdvUser
+
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -180,3 +182,10 @@ class ReductMessege(APIView):
         message.who_deleted_the_message.add(request.user)
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
+
+# Channels thread functions
+
+def get_current_user(username):
+    user = AdvUser.objects.get(username=username)
+
+    return user
