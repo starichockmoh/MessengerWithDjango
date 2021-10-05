@@ -31,6 +31,7 @@ class ThreadActiveOfUser(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Класс для просмотра диалога
 class ThreadActiveOfUserFront(APIView):
     permission_classes = [IsAuthenticated, ]
 
@@ -66,6 +67,13 @@ class ThreadDetail(APIView):
 
     def get(self, request, pk):
         thread = self.get_object(pk)
+        # Убогая система непрочитанных сообщений
+        for message in thread.get_messages.all()[300:]:
+            if message.sender != request.user:
+                message.read = True
+                message.save()
+            else:
+                pass
         serializer = ThreadDetailSerializer(thread)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

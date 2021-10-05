@@ -27,6 +27,7 @@ class Message(models.Model):
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     datetime = models.DateTimeField(auto_now_add=True)
     who_deleted_the_message = models.ManyToManyField(AdvUser, related_name='who_deleted_the_message')
+    read = models.BooleanField(default=False, verbose_name='Прочитаное сообщение')
 
     def get_images(self):
         return self.messegephoto_set.all()

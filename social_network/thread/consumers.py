@@ -6,7 +6,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
 from thread.models import Message, Thread
-
 from thread.views import get_current_user
 
 
@@ -34,14 +33,8 @@ class MessageConsumer(AsyncWebsocketConsumer):
         message = text_data_json['text']
         username = text_data_json['sender']
         new_message = await self.create_new_message(message, username)
-        # if len(new_message.sender.addit_image) == 0:
-        #     last_image = None
-        # else:
-        #     last_image = new_message.sender.addit_image[0]
-
         data = {
             'sender': new_message.sender.pk,
-            # 'avatar': new_message.sender.addit_image.all(),
             'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),
             'text': new_message.text,
             'message_id': new_message.pk
