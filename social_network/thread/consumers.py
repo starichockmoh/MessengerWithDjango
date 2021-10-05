@@ -59,7 +59,7 @@ class MessageConsumer(AsyncWebsocketConsumer):
     def create_new_message(self, text):
         thread = Thread.objects.get(pk=self.thread_id)
         new_message = Message.objects.create(
-            author=self.scope['user'],
+            sender=self.scope['user'],
             text=text,
             thread=thread
         )
