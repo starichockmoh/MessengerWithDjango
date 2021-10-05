@@ -15,6 +15,7 @@ import {StyledComponent} from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../Redux/Store";
 import {ActivateProfileSaga} from "../../../Redux/Sagas/ProfileSaga";
+import {ToCorrectImage} from "../../../Helper Functions/ToCorrectImage";
 
 export const SettingsPage: React.FC = () => {
     const dispatch = useDispatch()
@@ -25,9 +26,10 @@ export const SettingsPage: React.FC = () => {
     }, [UserID])
 
     const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
+    const UserAvatar = UserData?.addit_image[UserData.addit_image.length - 1]?.image
     return <Settings>
         <SideHeader header={'Settings'}/>
-        {UserData && <UserProfile Avatar={seva} Name={UserData.username} Is_online={UserData.is_online}/>}
+        {UserData && <UserProfile Avatar={UserAvatar? ToCorrectImage(UserAvatar) : ''} Name={UserData.username} Is_online={UserData.is_online}/>}
         <SpecialLine/>
         <SettingsElement Setting={'Edit profile'} Icon={EditIcon} Link={'/edit_profile'}/>
         <SettingsElement Setting={'Security'} Icon={SecurityIcon} Link={'/edit_profile'}/>

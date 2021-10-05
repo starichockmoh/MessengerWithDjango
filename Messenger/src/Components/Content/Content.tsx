@@ -53,14 +53,16 @@ export const ContentBlock: React.FC = () => {
         Text={m.text}
         Media={{photo: m.get_images.length ? m.get_images[0].image: ''}}
     />)
-    const CommentsArray = useSelector(((state: AppStateType) => state.Comments.Comments))
-    const WSStatus = useSelector(((state: AppStateType) => state.Comments.WSStatus))
-    useEffect(() => {
-        dispatch(StartChatSagaActions.StartWsAC())
-        return () => {
-            dispatch(StartChatSagaActions.CloseWSAC())
-        }
-    }, [dispatch])
+    const DialogID = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.pk)
+    //
+    // const CommentsArray = useSelector(((state: AppStateType) => state.Comments.Comments))
+    // const WSStatus = useSelector(((state: AppStateType) => state.Comments.WSStatus))
+    // useEffect(() => {
+    //     if (!!DialogID) dispatch(StartChatSagaActions.StartWsAC(DialogID))
+    //     return () => {
+    //         dispatch(StartChatSagaActions.CloseWSAC())
+    //     }
+    // }, [dispatch, DialogID])
 
     switch (ContentState) {
         case "COMMENTS": {

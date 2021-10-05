@@ -26,6 +26,7 @@ import {AppStateType} from "../../Redux/Store";
 import {profileAPI} from "../../Api/ProfileAPI";
 import {ActivateProfileSaga} from "../../Redux/Sagas/ProfileSaga";
 import {ToNicePhoneNumber} from "../../Helper Functions/ToNicePhoneNumber";
+import {ToCorrectImage} from "../../Helper Functions/ToCorrectImage";
 
 
 export const Menu: React.FC = () => {
@@ -36,7 +37,9 @@ export const Menu: React.FC = () => {
         UserID && dispatch(ActivateProfileSaga.Profile(UserID))
     }, [UserID])
 
+
     const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
+    const UserAvatar = UserData?.addit_image[UserData.addit_image.length - 1]?.image
     return <MenuBlock>
         <CloseButton>
             <CustomNavLink to={'/'}>
@@ -46,7 +49,7 @@ export const Menu: React.FC = () => {
 
         {!!UserData && <UserInfo Name={UserData.username}
                                  Phone={ToNicePhoneNumber(UserData.telephone)}
-                                 Avatar={UserData.addit_image[UserData.addit_image.length - 1]?.image}/>}
+                                 Avatar={UserAvatar? ToCorrectImage(UserAvatar) : ''}/>}
 
         <MenuContent>
             <MenuElement Name={'New Group'} Link={'/settings'} Icon={GroupIcon}/>

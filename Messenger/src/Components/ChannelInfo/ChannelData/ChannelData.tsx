@@ -19,6 +19,7 @@ import {DialogOptions} from "./Options/DialigOptions";
 import {useSelector} from "react-redux";
 import {AppStateType} from "../../../Redux/Store";
 import {ToNicePhoneNumber} from "../../../Helper Functions/ToNicePhoneNumber";
+import {ToCorrectImage} from "../../../Helper Functions/ToCorrectImage";
 
 type PropsType = {
     ChangePage: (page: ChannelInfoPageType) => void
@@ -38,8 +39,8 @@ export const ChannelData: React.FC<PropsType> = ({ChangePage}) => {
             IsChannel={!!ChannelData}
             Name={DialogData && DialogUser ? DialogUser.username : ChannelData ? ChannelData.title : ''}
             Avatar={DialogData && DialogUser && AvatarsLen
-                ? DialogUser.addit_image[AvatarsLen - 1].image
-                : ChannelData ? ChannelData.avatar : ''}/>
+                ? ToCorrectImage(DialogUser.addit_image[AvatarsLen - 1].image)
+                : ChannelData ? ToCorrectImage(ChannelData.avatar) : ''}/>
         <SpecialLine/>
         {ChannelData
             ? <Description isAdmin={true}

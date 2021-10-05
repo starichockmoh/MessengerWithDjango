@@ -17,6 +17,7 @@ import {ParticipantType} from "../../Types/Types";
 import {GetPartItem} from "../../Helper Functions/GetPartItem";
 import {ChannelListsAC} from "../../Redux/Reducers/ChannelListsReducer";
 import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
+import {ToCorrectImage} from "../../Helper Functions/ToCorrectImage";
 
 
 export const ArchivedChannelList: React.FC = () => {
@@ -39,7 +40,7 @@ export const ArchivedChannelList: React.FC = () => {
 
 
     const DialogsItems = DialogsData?.map(d => <ChannelListItem
-        ChannelPhoto={GetPartItem(d.participants, CurrentUserID, "photo")}
+        ChannelPhoto={ToCorrectImage(GetPartItem(d.participants, CurrentUserID, "photo"))}
         ChannelName={GetPartItem(d.participants, CurrentUserID, "name")}
         LastMessageDate={ToNiceDate(d.get_messeges[d.get_messeges.length - 1]?.datetime)}
         LastMessage={{

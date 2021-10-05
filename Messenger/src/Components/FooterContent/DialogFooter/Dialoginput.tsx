@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {
     AudioIcon,
     DialogInputBlock,
@@ -9,6 +9,7 @@ import {
 } from "./Dialoginput.styled"
 import {ActivateDialogsSaga} from "../../../Redux/Sagas/DialogsSaga";
 import {useDispatch} from "react-redux";
+import {StartChatSagaActions} from "../../../Redux/Sagas/CommentsSaga";
 
 
 
@@ -19,9 +20,51 @@ export const DialogInput: React.FC<{DialogID: number}> = ({DialogID}) => {
     const onInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         SetInputValue(e.target.value)
     }
+    const [wsChannel, SetWs] = useState<WebSocket | null>(null)
+    useEffect(() => {
+        let ws: WebSocket
+        const CloseHandler = () => {
+            console.log('CLOSED')
+            // setTimeout(create, 3000)
+        }
+        const OpenHandler = () => {
+            console.log("OPEN")
+        }
+        const MessageHandler = (e: MessageEvent) => {
+            console.log(e.data)
+        }
+        const ErrorHandler = (e: any) => {
+            console.log("Error")
+        }
+        function create() {
+            ws?.removeEventListener('close', CloseHandler)
+            ws?.removeEventListener('open', OpenHandler)
+            ws?.removeEventListener('message', MessageHandler)
+            ws?.removeEventListener('error', ErrorHandler)
+            ws?.close()
+            // ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')
+            ws = new WebSocket('ws://localhost:8000/ws/thread/5/')
+            ws.addEventListener('close', CloseHandler)
+            ws.addEventListener('error', ErrorHandler)
+            ws.addEventListener('open', OpenHandler)
+            ws.addEventListener('message', MessageHandler)
+            SetWs(ws)
+        }
+        create()
+        return () => {
+            ws?.removeEventListener('open', OpenHandler)
+            ws?.removeEventListener('error', ErrorHandler)
+            ws?.removeEventListener('close', CloseHandler)
+            ws?.removeEventListener('message', MessageHandler)
+            ws?.close()
+        }
+
+    }, [])
+
     const SendMessage = () => {
-        dispatch(ActivateDialogsSaga.SendMessage(DialogID, InputValue))
-        SetInputValue('')
+        wsChannel?.send(JSON.stringify({
+            'text': InputValue
+        }));
     }
 
 

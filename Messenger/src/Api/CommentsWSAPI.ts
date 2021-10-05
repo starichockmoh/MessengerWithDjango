@@ -9,7 +9,6 @@ let emitter: EmitterType
 
 
 const MessageHandler = (e: MessageEvent) => {
-    debugger
     let ChatMessages: Array<CommentType> | null = null
     try {
         ChatMessages = JSON.parse(e.data)
@@ -24,7 +23,7 @@ const MessageHandler = (e: MessageEvent) => {
 const CloseHandler = () => {
     console.log("CLOSED")
     emitter(CommentsActions.SetWSStatus("CLOSED"))
-    // setTimeout(() => emitter({ type: "TRY_TO_RECONNECT"}), 3000)
+    setTimeout(() => emitter({ type: "TRY_TO_RECONNECT"}), 3000)
 
 }
 
@@ -32,7 +31,7 @@ const OpenedHandler = () => {
     console.log("OPENED")
     emitter(CommentsActions.SetWSStatus("OPENED"))
 }
-const ErrorHandler = () => {
+const ErrorHandler = (e: any) => {
     console.log("ERROR")
     emitter(CommentsActions.SetWSStatus("ERROR"))
 }
@@ -46,11 +45,14 @@ const CleanUp = () => {
 }
 
 
-const initWebsocket = () => {
+const initWebsocket = (id: number) => {
     return eventChannel((emitt: EmitterType) => {
         emitter = emitt
         CleanUp()
-        ws = new WebSocket('ws://localhost:8000/ws/thread/5/')
+        ws = new WebSocket(`ws://localhost:8000/ws/thread/5/`)
+        ws.onmessage = (m: any) => {
+            debugger
+        }
         ws.addEventListener('close', CloseHandler)
         ws.addEventListener('open', OpenedHandler)
         ws.addEventListener('error', ErrorHandler)
@@ -62,14 +64,17 @@ const initWebsocket = () => {
 }
 
 export const commentsAPI = {
-    start() {
-        return initWebsocket()
+    start(id: number) {
+        return initWebsocket(id)
     },
     stop(){
         CleanUp()
     },
     sendMessage(message: string){
-        ws?.send(message)
+        debugger
+        ws?.send(JSON.stringify({
+            'text': message
+        }));
     }
 }
 

@@ -4,7 +4,7 @@ import {CommentsActions} from "../Reducers/CommentsReducer";
 import {commentsAPI, EmitterActionsType} from "../../Api/CommentsWSAPI";
 
 export const StartChatSagaActions = {
-    StartWsAC: () => ({type: "START_WS"} as const),
+    StartWsAC: (id: number) => ({type: "START_WS", id} as const),
     SendMessageAC: (message: string) => ({type: "SEND_CHAT_MESSAGE", message} as const),
     CloseWSAC: () => ({type: "CLOSE_WS_CHANNEL"} as const)
 }
@@ -13,13 +13,13 @@ type SendMessageActionType = ReturnType<typeof StartChatSagaActions.SendMessageA
 type StartChatSagaActionsConstants = ActionsConstantsType<typeof StartChatSagaActions>
 
 export function* WSSagaWatcher() {
-    yield takeEvery<StartChatSagaActionsConstants>("START_WS", function* (){
-        let channel: ReturnType<typeof commentsAPI.start> = yield call(commentsAPI.start)
+    yield takeEvery<StartChatSagaActionsConstants>("START_WS", function* (action: any){
+        let channel: ReturnType<typeof commentsAPI.start> = yield call(commentsAPI.start, action.id)
         yield takeLatest<StartChatSagaActionsConstants, any>("SEND_CHAT_MESSAGE", SendMessageWorker)
         while (true) {
             const WSAction: EmitterActionsType  = yield take(channel)
             if (WSAction.type === "TRY_TO_RECONNECT") {
-                channel = yield call(commentsAPI.start)
+                channel = yield call(commentsAPI.start, 5)
             }
             else yield put(WSAction)
         }

@@ -8,6 +8,7 @@ import {ActivateDialogsSaga} from "../../Redux/Sagas/DialogsSaga";
 import {GetPartItem} from "../../Helper Functions/GetPartItem";
 import {ToNiceDate} from "../../Helper Functions/ToNiceDate";
 import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
+import {ToCorrectImage} from "../../Helper Functions/ToCorrectImage";
 
 
 export const ChannelList: React.FC = () => {
@@ -30,7 +31,7 @@ export const ChannelList: React.FC = () => {
     }, [CurrentList])
 
     const ChannelsItems = ChannelsData?.map(d => <ChannelListItem
-        ChannelPhoto={d.avatar}
+        ChannelPhoto={ToCorrectImage(d.avatar)}
         IsActive={d.pk === CurrentChannelID}
         ChannelName={d.title}
         LastMessageDate={ToNiceDate(d.get_posts[d.get_posts.length - 1]?.datetime)}
@@ -45,7 +46,7 @@ export const ChannelList: React.FC = () => {
 
     const DialogsItems = DialogsData?.map(d => <ChannelListItem
         IsActive={d.pk === CurrentDialogID}
-        ChannelPhoto={GetPartItem(d.participants, CurrentUserID, "photo")}
+        ChannelPhoto={ToCorrectImage(GetPartItem(d.participants, CurrentUserID, "photo"))}
         ChannelName={GetPartItem(d.participants, CurrentUserID, "name")}
         LastMessageDate={ToNiceDate(d.get_messeges[d.get_messeges.length - 1]?.datetime)}
         id={d.pk}

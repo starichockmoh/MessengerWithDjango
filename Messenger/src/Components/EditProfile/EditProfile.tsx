@@ -21,6 +21,7 @@ import {AppStateType} from "../../Redux/Store";
 import {ActivateProfileSaga} from "../../Redux/Sagas/ProfileSaga";
 import {profileAPI} from "../../Api/ProfileAPI";
 import {ToNicePhoneNumber} from "../../Helper Functions/ToNicePhoneNumber";
+import {ToCorrectImage} from "../../Helper Functions/ToCorrectImage";
 
 
 export const EditProfile: React.FC = () => {
@@ -33,11 +34,12 @@ export const EditProfile: React.FC = () => {
 
 
     const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
+    const UserAvatar = UserData?.addit_image[UserData.addit_image.length - 1]?.image
     if (UserData) return <EditProfileBlock>
         <SideHeader header={'Info'} prevLink={'Settings'}/>
         <EditAvatar>
             <div>
-                <EditAvatarImage src={photo}/>
+                <EditAvatarImage src={UserAvatar? ToCorrectImage(UserAvatar) : ''}/>
             </div>
             <div>
                 <Upload>
