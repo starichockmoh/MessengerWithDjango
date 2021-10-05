@@ -29,17 +29,19 @@ class MessageConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
 
-    async def receive(self, data_message):
-        text_data_json = json.loads(data_message)
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
         message = text_data_json['text']
         username = text_data_json['sender']
         new_message = await self.create_new_message(message, username)
-        data = {
+
+        data = json.dumps({
             'sender': new_message.sender.username,
-            'avatar': new_message.sender.addit_image[-1],
+            'avatar': new_message.sender.addit_image.all(),
             'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),
             'text': new_message.text
-        }
+        })
+
 
         await self.channel_layer.group_send(
             self.post_group_name,
@@ -49,14 +51,14 @@ class MessageConsumer(AsyncWebsocketConsumer):
             }
         )
 
-    # async def new_message(self, event):
-    #     message = event['message']
-    #
-    #     await self.send(
-    #         text_data=json.dumps({
-    #             'message': message
-    #         })
-    #     )
+    async def new_message(self, event):
+        message = event['message']
+
+        await self.send(
+            text_data=json.dumps({
+                'message': message
+            })
+        )
 
     @database_sync_to_async
     def create_new_message(self, message, username):

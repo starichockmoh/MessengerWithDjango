@@ -76,6 +76,7 @@ export const DialogInput: React.FC<{DialogID: number}> = () => {
             'text': InputValue,
             'sender' : UserName
         }));
+        SetInputValue('')
     }
 
 
