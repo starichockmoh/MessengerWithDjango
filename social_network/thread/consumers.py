@@ -5,8 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 
-from thread.models import Message, Thread
-
+from thread.models import Message, Thread, MessegePhoto
 from thread.views import get_current_user
 
 
@@ -33,18 +32,22 @@ class MessageConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['text']
         username = text_data_json['sender']
-        new_message = await self.create_new_message(message, username)
-        # if len(new_message.sender.addit_image) == 0:
-        #     last_image = None
-        # else:
-        #     last_image = new_message.sender.addit_image[0]
-
+        # Функция которая зная кол-во фотографий затирает их в массив для дальнейшей отправки
+        q = int(text_data_json['quantity'])
+        images = []
+        for i in range(q):
+            images.add(text_data_json['image'+str(i)])
+        #
+        new_message = await self.create_new_message(message, username, images)
+        # тест вариант по фотографиям
+        images = json.dumps(new_message.addit_image.all())
         data = {
             'sender': new_message.sender.pk,
-            # 'avatar': new_message.sender.addit_image.all(),
             'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),
             'text': new_message.text,
-            'message_id': new_message.pk
+            'message_id': new_message.pk,
+            # тест вариант по фотографиям
+            'images': images
         }
 
         await self.channel_layer.group_send(
@@ -65,7 +68,7 @@ class MessageConsumer(AsyncWebsocketConsumer):
         )
 
     @database_sync_to_async
-    def create_new_message(self, message, username):
+    def create_new_message(self, message, username, images):
         thread = Thread.objects.get(pk=self.thread_id)
         user = get_current_user(username)
         new_message = Message.objects.create(
@@ -73,4 +76,15 @@ class MessageConsumer(AsyncWebsocketConsumer):
             text=message,
             thread=thread
         )
+        thread.date_of_last_message = new_message.datetime
+        thread.save()
+        # Функция которая перебирает все фотографии и затирает их в бд
+        for image in images:
+            MessegePhoto.objects.create(
+                image=image,
+                thread=thread,
+                message=new_message,
+                sender=user
+            )
+        #
         return new_message
