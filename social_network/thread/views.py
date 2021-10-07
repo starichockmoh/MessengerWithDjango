@@ -18,6 +18,8 @@ from rest_framework.parsers import MultiPartParser, FileUploadParser
 from django.http import Http404
 from django.db.models import Q
 
+from operator import attrgetter
+
 
 # Класс для создания диалога но не для просмотра
 class ThreadActiveOfUser(APIView):
@@ -39,7 +41,7 @@ class ThreadActiveOfUserFront(APIView):
         threads = Thread.objects.filter(participants__in=[request.user]).exclude(
             Q(archive__in=[request.user]) |
             Q(deleted__in=[request.user])
-        )
+        ).order_by("-date_of_last_message")
         serializer = ThreadListFrontSerializer(threads, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -15,6 +15,10 @@ class AdvUser(AbstractUser):
     def get_channels(self):
         return self.channel_set.all()
 
+    @property
+    def full_name(self):
+        return '%s %s' % (self.first_name, self.last_name)
+
     class Meta(AbstractUser.Meta):
         pass
 

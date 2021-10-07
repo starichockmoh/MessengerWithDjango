@@ -52,7 +52,7 @@ class AdvUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AdvUser
-        fields = ["pk", "last_active",
+        fields = ["pk", "last_active", "full_name",
                   "is_online", "first_name",
                   "last_name", "about_user", "username",
                   "friends", "telephone", "password", "addit_image"

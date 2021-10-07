@@ -30,11 +30,14 @@ class MessegeSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         request = self.context.get("request")
+        thread = validated_data['thread']
         messege = Message.objects.create(
             text=validated_data['text'],
             sender=request.user,
-            thread=validated_data['thread'],
+            thread=thread,
         )
+        thread.date_of_last_message = messege.datetime
+        thread.save()
         return messege
 
     def update(self, instance, validated_data):
@@ -77,10 +80,11 @@ class ThreadDetailSerializer(serializers.ModelSerializer):
 # Сериализатор для фронта чтобы отображались пользователи диалога
 class ThreadListFrontSerializer(serializers.ModelSerializer):
     participants = FriendsListSerializer(many=True, required=False)
-    get_messeges = MessegeSerializer(many=True, required=False)
+    last_message = MessegeSerializer(required=False)
     deleted = FriendsListSerializer(many=True, required=False)
 
     class Meta:
         model = Thread
-        fields = ['pk', 'participants', 'get_messeges', 'push_notification', 'archive', 'deleted']
+        fields = ['pk', 'last_message', 'participants', 'push_notification', 'archive', 'deleted',
+                  'date_of_last_message']
         read_only_fields = ['pk', 'archive']
