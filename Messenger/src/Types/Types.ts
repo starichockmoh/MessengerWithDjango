@@ -8,6 +8,7 @@ export type AuthUserProfileType = {
     username: string
     friends: Array<any>
     telephone: string
+    addit_image: Array<UserPhotoType>
 }
 
 export type WSStatusType =  'OPENED' | 'CLOSED' | 'PENDING' | 'ERROR'

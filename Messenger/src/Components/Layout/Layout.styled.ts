@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import phone from "./../../Assets/phone.jpg"
 
 export const AppLayout = styled("div")`
   display: grid;
