@@ -1,13 +1,13 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {CommentsBlock, CommentsHeader} from "./Comments.styled"
 import photo1 from "./../../../../Assets/screp.jpg"
 import {CommentItem} from "./Comment";
 import {ArrowLeftOutlined} from "@ant-design/icons";
 import {Button} from "antd";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {AppStateType} from "../../../../Redux/Store";
 import {ToNiceDate} from "../../../../Helper Functions/ToNiceDate";
-import {StartChatSagaActions} from "../../../../Redux/Sagas/CommentsSaga";
+import {Preloader} from "../../../Common/Preloader";
 
 type PropsType = {
     SetPage: (page: 'COMMENTS' | 'MESSAGES' | 'POSTS') => void
@@ -28,6 +28,6 @@ export const CommentsPage: React.FC<PropsType> = ({SetPage}) => {
             <Button type={"link"} icon={<ArrowLeftOutlined/>} onClick={() => SetPage('POSTS')}/>
             Comments
         </CommentsHeader>
-        {CommentsItems}
+        {CommentsData? CommentsItems: <Preloader/>}
     </CommentsBlock>
 }

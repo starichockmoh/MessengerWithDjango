@@ -5,4 +5,6 @@ import "./Content.css"
 export const ContentWrapper = styled("div")`
   height: 87vh;
   overflow-y: scroll;
+  position: relative;
+  width: 60vw;
 `

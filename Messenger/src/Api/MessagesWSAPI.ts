@@ -1,39 +1,47 @@
-import {CommentType} from "../Types/Types";
-import {CommentsActions, CommentsActionsType} from "../Redux/Reducers/CommentsReducer";
+import {CommentType, MessageType} from "../Types/Types";
+import {MessagesWSACType, MessagesWSAC} from "../Redux/Reducers/DialogsReducer"
 import {eventChannel} from "redux-saga";
+import {all} from "redux-saga/effects";
+import {ReceiveMessageActionType, StartChatSagaActions} from "../Redux/Sagas/MessagesWSSaga";
+
 
 let ws: WebSocket | null = null
-export type EmitterActionsType = CommentsActionsType | {type: "TRY_TO_RECONNECT"}
+export type EmitterActionsType = MessagesWSACType | {type: "MESSAGES_WS_SAGA/TRY_TO_RECONNECT"} | ReceiveMessageActionType
 type EmitterType = (input: EmitterActionsType) => void
 let emitter: EmitterType
 
 
+type WSResponseMessageType = {
+    message: MessageType
+}
+
+
 const MessageHandler = (e: MessageEvent) => {
-    let ChatMessages: Array<CommentType> | null = null
+    let MessagesData: WSResponseMessageType | null = null
     try {
-        ChatMessages = JSON.parse(e.data)
+        MessagesData = JSON.parse(e.data)
     } catch(e: any) {
         console.error(`Error parsing : ${e.data}`)
     }
-    if (ChatMessages) {
-        return emitter(CommentsActions.SetComments(ChatMessages))
+    if (MessagesData) {
+        return emitter(StartChatSagaActions.ReceiveMessage(MessagesData.message))
     }
 }
 
 const CloseHandler = () => {
     console.log("CLOSED")
-    emitter(CommentsActions.SetWSStatus("CLOSED"))
-    setTimeout(() => emitter({ type: "TRY_TO_RECONNECT"}), 3000)
+    emitter(MessagesWSAC.SetWSStatus("CLOSED"))
+    setTimeout(() => emitter({ type: "MESSAGES_WS_SAGA/TRY_TO_RECONNECT"}), 3000)
 
 }
 
 const OpenedHandler = () => {
     console.log("OPENED")
-    emitter(CommentsActions.SetWSStatus("OPENED"))
+    emitter(MessagesWSAC.SetWSStatus("OPENED"))
 }
 const ErrorHandler = (e: any) => {
     console.log("ERROR")
-    emitter(CommentsActions.SetWSStatus("ERROR"))
+    emitter(MessagesWSAC.SetWSStatus("ERROR"))
 }
 
 const CleanUp = () => {
@@ -41,6 +49,7 @@ const CleanUp = () => {
     ws?.removeEventListener('message', MessageHandler)
     ws?.removeEventListener('open', OpenedHandler)
     ws?.removeEventListener('error', ErrorHandler)
+    console.log('CLEAN')
     ws?.close()
 }
 
@@ -49,10 +58,7 @@ const initWebsocket = (id: number) => {
     return eventChannel((emitt: EmitterType) => {
         emitter = emitt
         CleanUp()
-        ws = new WebSocket(`ws://localhost:8000/ws/thread/5/`)
-        ws.onmessage = (m: any) => {
-            debugger
-        }
+        ws = new WebSocket(`ws://localhost:8000/ws/thread/${id}/`)
         ws.addEventListener('close', CloseHandler)
         ws.addEventListener('open', OpenedHandler)
         ws.addEventListener('error', ErrorHandler)
@@ -63,17 +69,17 @@ const initWebsocket = (id: number) => {
     })
 }
 
-export const commentsAPI = {
+export const messagesWSAPI = {
     start(id: number) {
         return initWebsocket(id)
     },
     stop(){
         CleanUp()
     },
-    sendMessage(message: string){
-        debugger
+    sendMessage(text: string, sender: string){
         ws?.send(JSON.stringify({
-            'text': message
+            'text': text,
+            'sender' : sender
         }));
     }
 }

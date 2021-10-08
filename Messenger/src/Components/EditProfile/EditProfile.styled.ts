@@ -8,18 +8,20 @@ export const EditProfileBlock = styled("div")`
   width: 20vw;
   height: 100vh;
   background-color: white;
-  display: grid;
-  grid-template-rows: 7vh 30vh 30vh 33vh;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: scroll;
 `
 export const EditAvatar = styled("div")`
   background-color: #F5F5F5;
   text-align: center;
   padding-top: 10%;
+  
 `
 export const EditAvatarImage = styled(Image)`
-  border-radius: 50%;
-  width: 90px;
-  height: 90px;
 
 `
 export const EditAvatarButton = styled(Button)`
@@ -28,6 +30,7 @@ export const EditAvatarButton = styled(Button)`
   padding: 3%;
   background-color: #08c;
   color: white;
+  overflow: hidden;
 `
 export const EditItem = styled('div')`
   display: grid;

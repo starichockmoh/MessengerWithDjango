@@ -6,11 +6,11 @@ import {AppReducer} from "./Reducers/AppReducer";
 import {ChannelInfoReducer} from "./Reducers/ChannelInfoReducer";
 import {ChannelListsReducer} from "./Reducers/ChannelListsReducer";
 import {AuthReducer} from "./Reducers/AuthReducer";
-import {AuthSagaWorker, WatchAuthSaga, WatchLoginSaga, WatchLogoutSaga} from "./Sagas/AuthSaga";
+import {WatchAuthSaga, WatchLoginSaga, WatchLogoutSaga} from "./Sagas/AuthSaga";
 import {ProfileReducer} from "./Reducers/ProfileReducer";
-import {WatchProfileChangeSaga, WatchProfileSaga} from "./Sagas/ProfileSaga";
+import {WatchAddProfilePhotoSaga, WatchProfileChangeSaga, WatchProfileSaga} from "./Sagas/ProfileSaga";
 import {DialogsReducer} from "./Reducers/DialogsReducer";
-import {WatchDialogsDetailsSaga, WatchDialogsSaga, WatchSendMessageSaga} from "./Sagas/DialogsSaga";
+import {WatchDialogsDetailsSaga, WatchDialogsSaga} from "./Sagas/DialogsSaga";
 import {
     WatchChannelDetailsSaga,
     WatchChannelsSaga,
@@ -18,8 +18,13 @@ import {
     WatchCreatePostSaga
 } from "./Sagas/ChannelsSaga";
 import {ContentReducer} from "./Reducers/ContentReducer";
-import CommentsReducer from "./Reducers/CommentsReducer";
-import {StopWSSagaWatcher, WSSagaWatcher} from "./Sagas/CommentsSaga";
+import {
+    MessagesWSSagaWatcher,
+    ReceiveMessageSagaWatcher,
+    SendMessageWSSagaWatcher,
+    StopMessagesSagaWatcher
+} from "./Sagas/MessagesWSSaga";
+
 
 
 
@@ -31,7 +36,6 @@ const MainReducer = combineReducers({
     Profile: ProfileReducer,
     Dialogs: DialogsReducer,
     Content: ContentReducer,
-    Comments: CommentsReducer
 })
 
 export type AppStateType = ReturnType<typeof MainReducer>
@@ -54,11 +58,13 @@ function* rootSaga() {
         spawn(WatchChannelsSaga),
         spawn(WatchChannelDetailsSaga),
         spawn(WatchDialogsDetailsSaga),
-        spawn(WatchSendMessageSaga),
         spawn(WatchCreateChannelSaga),
         spawn(WatchCreatePostSaga),
-        spawn(WSSagaWatcher),
-        spawn(StopWSSagaWatcher)
+        spawn(MessagesWSSagaWatcher),
+        spawn(SendMessageWSSagaWatcher),
+        spawn(StopMessagesSagaWatcher),
+        spawn(ReceiveMessageSagaWatcher),
+        spawn(WatchAddProfilePhotoSaga)
     ])
 }
 sagaMiddleware.run(rootSaga)

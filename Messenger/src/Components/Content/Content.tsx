@@ -13,7 +13,8 @@ import {ToNiceDate} from "../../Helper Functions/ToNiceDate";
 import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
 import {ActivateDialogsSaga} from "../../Redux/Sagas/DialogsSaga";
 import {ChannelListsAC} from "../../Redux/Reducers/ChannelListsReducer"
-import {StartChatSagaActions} from "../../Redux/Sagas/CommentsSaga";
+import {StartChatSagaActions} from "../../Redux/Sagas/MessagesWSSaga";
+import {Preloader} from "../Common/Preloader";
 const {SetList} = ChannelListsAC
 
 
@@ -21,9 +22,14 @@ export const ContentBlock: React.FC = () => {
     const dispatch = useDispatch()
     const ContentState = useSelector((state: AppStateType) => state.Content.ContentState)
     const CurrentUserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
+    const DialogID = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.pk)
+
+
     const SetContentState = (state: ContentStateType) => {
         dispatch(ContentAC.SetContentState(state))
     }
+
+
     useEffect(() => {
         const StorageChannelID = sessionStorage.getItem('CurrentChannelID')
         const StorageDialogID = sessionStorage.getItem('CurrentDialogID')
@@ -47,22 +53,24 @@ export const ContentBlock: React.FC = () => {
         SetPage={SetContentState}/>)
 
     const MessagesData = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.get_messeges)
-    const MessagesItems = MessagesData?.map(m => <Message
+    const MessagesItems = MessagesData?.map((m, index) => <Message
         Date={ToNiceDate(m.datetime)}
+        key={index}
         IsFriend={m.sender !== CurrentUserID}
         Text={m.text}
         // Media={{photo: m.get_images?.length ? m.get_images[0].image: ''}}
     />)
-    const DialogID = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.pk)
-    //
-    // const CommentsArray = useSelector(((state: AppStateType) => state.Comments.Comments))
-    // const WSStatus = useSelector(((state: AppStateType) => state.Comments.WSStatus))
-    // useEffect(() => {
-    //     if (!!DialogID) dispatch(StartChatSagaActions.StartWsAC(DialogID))
-    //     return () => {
-    //         dispatch(StartChatSagaActions.CloseWSAC())
-    //     }
-    // }, [dispatch, DialogID])
+
+
+    useEffect(() => {
+        DialogID && dispatch(StartChatSagaActions.StartWsAC(DialogID))
+        return () => {
+            dispatch(StartChatSagaActions.CloseWSAC())
+        }
+    }, [DialogID])
+
+
+    const WSStatus = useSelector(((state: AppStateType) => state.Dialogs.WSStatus))
 
     switch (ContentState) {
         case "COMMENTS": {
@@ -70,14 +78,12 @@ export const ContentBlock: React.FC = () => {
         }
         case "MESSAGES": {
             return <ContentWrapper>
-                {MessagesItems}
-                {/*<Message Date={'14:10'} IsFriend={true} Text={'Thank fuckkk yupuuu'} Media={{photo: photo}}/>*/}
-                {/*<Message Date={'14:15'} IsFriend={false} Text={'Thank fuckkk yupuuu'} Media={{photo: photo1}}/>*/}
+                {WSStatus === "OPENED" ? MessagesItems: <Preloader/>}
             </ContentWrapper>
         }
         case "POSTS": {
             return <ContentWrapper>
-                {PostsItems}
+                {PostsData? PostsItems : <Preloader/>}
             </ContentWrapper>
         }
         default :

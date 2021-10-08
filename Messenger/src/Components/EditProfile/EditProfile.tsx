@@ -1,27 +1,22 @@
 import React, {useEffect} from "react";
 import {
-    Chapter,
     EditAvatar,
     EditAvatarButton,
     EditAvatarImage,
-    EditItem,
     EditProfileBlock,
-    EditUserName,
-    NameIcon, PhoneIcon, UserNameIcon
+    NameIcon,
+    PhoneIcon,
+    UserNameIcon
 } from "./EditProfile.styled"
 import {SideHeader} from "../LeftSideBar/SideHeader";
-import photo from "./../../Assets/maska.jpg"
-import {Alert, Upload} from "antd";
-import {EditIcon} from "../Contacts/Contacts.styled";
+import {Alert, Button, Form, Input, Upload} from "antd";
 import {EditProfileItem} from "./EditProfileItem";
-import TextArea from "antd/es/input/TextArea";
-import { SpecialLine } from "../Common/CommonElements.styled";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../Redux/Store";
 import {ActivateProfileSaga} from "../../Redux/Sagas/ProfileSaga";
-import {profileAPI} from "../../Api/ProfileAPI";
-import {ToNicePhoneNumber} from "../../Helper Functions/ToNicePhoneNumber";
 import {ToCorrectImage} from "../../Helper Functions/ToCorrectImage";
+import {useForm} from "antd/es/form/Form";
+
 
 
 export const EditProfile: React.FC = () => {
@@ -32,20 +27,30 @@ export const EditProfile: React.FC = () => {
         UserID && dispatch(ActivateProfileSaga.Profile(UserID))
     }, [UserID])
 
+    const onFinish = (values: {add_user_photo: any}) => {
+        dispatch(ActivateProfileSaga.AddPhoto((values.add_user_photo.fileList[0].originFileObj)))
+        form.resetFields()
+    }
 
+    const [form] = Form.useForm();
     const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
     const UserAvatar = UserData?.addit_image[UserData.addit_image.length - 1]?.image
     if (UserData) return <EditProfileBlock>
         <SideHeader header={'Info'} prevLink={'Settings'}/>
         <EditAvatar>
-            <div>
                 <EditAvatarImage src={UserAvatar? ToCorrectImage(UserAvatar) : ''}/>
-            </div>
-            <div>
-                <Upload>
-                    <EditAvatarButton>SET PROFILE PHOTO</EditAvatarButton>
-                </Upload>
-            </div>
+                <Form name="user_photo" onFinish={onFinish} form={form}>
+                    <Form.Item name="add_user_photo" rules={[{required: true, message: 'This field is required'}]}>
+                        <Upload name="add_user_photo" maxCount = {1} listType={"picture"}>
+                            <EditAvatarButton>CHOOSE PHOTO</EditAvatarButton>
+                        </Upload>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="link" htmlType="submit">
+                            Set photo
+                        </Button>
+                    </Form.Item>
+                </Form>
         </EditAvatar>
         <div>
             <EditProfileItem ChapterName={'First Name'} FormName={"first_name"}

@@ -22,7 +22,6 @@ export const CreateChannelPage: React.FC = () => {
 
     const dispatch = useDispatch()
     const onFinish = (values: ValuesType) => {
-
         dispatch(ActivateChannelsSaga.CreateChannel(values.channel_avatar.fileList[0].originFileObj,
             values.channel_title, values.channel_description))
     };
@@ -31,7 +30,7 @@ export const CreateChannelPage: React.FC = () => {
         <SideHeader header={'Create'}/>
         <Form name="create_channel" onFinish={onFinish}>
             <Form.Item name="channel_avatar" rules={[{required: true, message: 'This field is required'}]}>
-                <Upload name="channel_avatar" listType={"picture-card"}>
+                <Upload name="channel_avatar" maxCount = {1} listType={"picture-card"}>
                     <PlusOutlined/>
                     <div>Upload photo</div>
                 </Upload>

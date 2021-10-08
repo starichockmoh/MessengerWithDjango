@@ -7,6 +7,7 @@ import {ChangedProfileType} from "../../Types/Types";
 
 export const ActivateProfileSaga = {
     Profile: (ID: number) => ({type: "PROFILE_SAGAS/GET_PROFILE", ID} as const),
+    AddPhoto: (photo: File) => ({type: "PROFILE_SAGAS/ADD_PHOTO", photo} as const),
     ChangeProfile: (data: ChangedProfileType) =>
         ({type: "PROFILE_SAGAS/CHANGE_PROFILE", ...data} as const)
 }
@@ -38,6 +39,22 @@ export function* WatchProfileChangeSaga() {
             }
         } catch (error) {
             console.log(error) //Show error on screen
+        }
+    }
+}
+
+type AddPhotoActionType = ReturnType<typeof ActivateProfileSaga.AddPhoto>
+type AddPhotoResType = SagaReturnType<typeof profileAPI.add_photo>
+export function* WatchAddProfilePhotoSaga() {
+    while (true) {
+        try {
+            const action: AddPhotoActionType = yield take("PROFILE_SAGAS/ADD_PHOTO")
+            const data: AddPhotoResType = yield call(profileAPI.add_photo, action.photo)
+            if (data.status < 300) {
+                yield put(ProfileAC.SetPhoto(data.data))
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
 }

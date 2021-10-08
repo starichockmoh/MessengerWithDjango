@@ -58,21 +58,7 @@ export function* WatchDialogsDetailsSaga() {
     }
 }
 
-type SendMessageResType = SagaReturnType<typeof dialogsAPI.send_message>
-type SendMessageActionType = {
-    dialogID: number
-    text: string
-}
-export function* WatchSendMessageSaga() {
-    while (true) {
-        try {
-            const {dialogID, text} : SendMessageActionType = yield take("DIALOGS_SAGAS/SEND_MESSAGE")
-            const data: SendMessageResType = yield call(dialogsAPI.send_message, dialogID, text)
-            yield put(DialogsAC.SetMessage(data.data))
-        } catch (error) {
-            console.log(error)
-        }
-    }
-}
+
+
 
 
