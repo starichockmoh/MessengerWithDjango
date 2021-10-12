@@ -48,14 +48,17 @@ export const ChannelList: React.FC = () => {
         IsActive={d.pk === CurrentDialogID}
         ChannelPhoto={ToCorrectImage(GetPartItem(d.participants, CurrentUserID, "photo"))}
         ChannelName={GetPartItem(d.participants, CurrentUserID, "name")}
-        LastMessageDate={ToNiceDate(d.get_messeges[d.get_messeges.length - 1]?.datetime)}
+        LastMessageDate={''}
+        // LastMessageDate={ToNiceDate(d.get_messeges[d.get_messeges.length - 1]?.datetime)}
         id={d.pk}
         key={d.pk}
         LastMessage={{
             Media: null,
-            Text: d.get_messeges[d.get_messeges.length - 1]?.text
+            Text: ''
+            // Text: d.get_messeges[d.get_messeges.length - 1]?.text
         }}
-        MessagesCount={d.get_messeges.length}
+        MessagesCount={3}
+        // MessagesCount={d.get_messeges.length}
         IsChannel={false}/>)
 
 

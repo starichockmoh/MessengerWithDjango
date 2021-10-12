@@ -75,9 +75,15 @@ export type MessageType = {
     thread: number
     who_deleted_the_message:Array<number>
 }
-
-
-export type ChannelType = {
+//
+// archive: []
+// date_of_last_message: "2021-10-07T19:24:20.732766Z"
+// deleted: []
+// last_message: {pk: 60, text: "vno", sender: 1, datetime: "2021-10-07T19:58:05.820429Z", thread: 4, get_images: [],…}
+// participants: [{pk: 1, last_active: null, is_online: false, first_name: "Starick", last_name: "Moh",…},…]
+// pk: 4
+// push_notification:
+    export type ChannelType = {
     creator: ParticipantType
     avatar: string
     description: string
