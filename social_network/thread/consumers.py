@@ -36,11 +36,11 @@ class MessageConsumer(AsyncWebsocketConsumer):
         q = int(text_data_json['quantity'])
         images = []
         for i in range(q):
-            images.add(text_data_json['image'+str(i)])
+            images.append(text_data_json['image'+str(i)])
         #
         new_message = await self.create_new_message(message, username, images)
         # тест вариант по фотографиям
-        images = json.dumps(new_message.addit_image.all())
+        # images = json.dumps(new_message.addit_image.all()) не сработает потому что dict
         data = {
             'sender': new_message.sender.pk,
             'datetime': new_message.datetime.strftime('%Y-%m-%d %H:%m'),

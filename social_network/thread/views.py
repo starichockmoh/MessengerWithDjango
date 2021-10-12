@@ -43,6 +43,7 @@ class ThreadActiveOfUserFront(APIView):
             Q(deleted__in=[request.user])
         ).order_by("-date_of_last_message")
         serializer = ThreadListFrontSerializer(threads, many=True)
+        messeges = Message.objects.all()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -132,8 +133,6 @@ class WriteMessege(APIView):
     def get(self, request):
         messages = Message.objects.all()
         serializer = MessegeSerializer(messages, many=True)
-        messeges = json.loads(Message.objects.all())
-        print(messeges)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):

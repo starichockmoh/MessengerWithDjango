@@ -14,11 +14,11 @@ class Thread(models.Model):
     def get_images(self):
         return self.messegephoto_set.all()
 
-    def get_messeges(self):
+    def get_messages(self):
         return self.message_set.all()
 
     def last_message(self):
-        return self.get_messeges().all().order_by("-datetime")[0]
+        return self.get_messages().all().order_by("-datetime")[0]
 
     class Meta:
         verbose_name_plural = 'Диалог'

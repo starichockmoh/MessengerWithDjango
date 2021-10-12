@@ -54,26 +54,27 @@ class MessegeSerializer(serializers.ModelSerializer):
 
 
 class ThreadListSerializer(serializers.ModelSerializer):
+    """ Serializer for redaction settings of thread """
     # participants = FriendsListSerializer(many=True, required=False)
-    get_messeges = MessegeSerializer(many=True, required=False)
+    get_messages = MessegeSerializer(many=True, required=False)
 
     class Meta:
         model = Thread
-        fields = ['pk', 'participants', 'get_messeges', 'push_notification', 'archive']
+        fields = ['pk', 'participants', 'get_messages', 'push_notification', 'archive']
         read_only_fields = ['pk', 'archive']
 
 
 class ThreadDetailSerializer(serializers.ModelSerializer):
     participants = FriendsListSerializer(many=True, required=False)
-    get_messeges = MessegeSerializer(many=True, required=False)
+    get_messages = MessegeSerializer(many=True, required=False)
 
     def create(self, validated_data):
         return Thread.objects.create(**validated_data)
 
     class Meta:
         model = Thread
-        fields = ['pk', 'participants', 'get_messeges', 'push_notification', 'archive', 'deleted']
-        read_only_fields = ['pk', 'participants', 'get_messeges']
+        fields = ['pk', 'participants', 'get_messages', 'push_notification', 'archive', 'deleted']
+        read_only_fields = ['pk', 'participants', 'get_messages']
         extra_kwargs = {'participants': {'required': False}}
 
 
