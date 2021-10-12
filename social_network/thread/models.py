@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.timezone import localtime
 
 from account.models import AdvUser
 
@@ -19,6 +18,9 @@ class Thread(models.Model):
 
     def last_message(self):
         return self.get_messages().all().order_by("-datetime")[0]
+
+    def count_messages(self):
+        return len(self.message_set.all())
 
     class Meta:
         verbose_name_plural = 'Диалог'
