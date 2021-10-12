@@ -12,10 +12,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {StartChatSagaActions} from "../../../Redux/Sagas/MessagesWSSaga";
 import {AppStateType} from "../../../Redux/Store";
 import {DialogsAC} from "../../../Redux/Reducers/DialogsReducer";
+import {Form, Upload} from "antd";
+import {EditAvatarButton} from "../../EditProfile/EditProfile.styled";
+import {DialogUpload} from "./DialogUpload";
 
 
-
-export const DialogInput: React.FC<{DialogID: number}> = () => {
+export const DialogInput: React.FC<{ DialogID: number }> = () => {
     const dispatch = useDispatch()
 
     const UserName = useSelector((state: AppStateType) => state.Profile.AuthProfile?.username)
@@ -28,9 +30,6 @@ export const DialogInput: React.FC<{DialogID: number}> = () => {
     }
 
 
-
-
-
     const SendMessage = () => {
         if (UserName) {
             dispatch(StartChatSagaActions.SendMessageAC(InputValue, UserName))
@@ -39,15 +38,28 @@ export const DialogInput: React.FC<{DialogID: number}> = () => {
     }
 
 
-    return <DialogInputBlock>
-        <DialogInputButton type={"link"} icon = {<PaperClipIcon/>}/>
-        <DialogTextArea onChange={onInputChange}
-                        value={InputValue} bordered={false}
-                        autoSize={{maxRows: 1}}
-                        placeholder={'Write a message...'}/>
-        <DialogInputButton type={"link"} icon = {<SmileIcon/>}/>
-        {InputValue
-            ? <DialogInputButton onClick={SendMessage} type={"link"} icon = {<SendIcon/>}/>
-            : <DialogInputButton type={"link"} icon = {<AudioIcon/>}/>}
+    return <DialogInputBlock name={'dialog_input'}>
+        <Form.Item name={'dialog_input_photos'}>
+            <Upload name="dialog_input_photos" maxCount={10} listType={"text"}>
+                <DialogInputButton type={"link"} icon={<PaperClipIcon/>}/>
+            </Upload>
+        </Form.Item>
+        <Form.Item name={"dialog_input_text"}>
+            <DialogTextArea
+                // onChange={onInputChange}
+                // value={InputValue}
+                bordered={false}
+                autoSize={{maxRows: 1}}
+                placeholder={'Write a message...'}/>
+        </Form.Item>
+        <Form.Item name={"dialog_input_smiles"}>
+            <DialogInputButton type={"link"} icon={<SmileIcon/>}/>
+        </Form.Item>
+        <Form.Item>
+            {InputValue
+                ? <DialogInputButton onClick={SendMessage} type={"link"} icon={<SendIcon/>}/>
+                : <DialogInputButton type={"link"} icon={<AudioIcon/>}/>}
+        </Form.Item>
+        {/*<DialogUpload/>*/}
     </DialogInputBlock>
 }
