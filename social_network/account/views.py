@@ -10,6 +10,7 @@ from rest_framework.status import HTTP_404_NOT_FOUND
 
 
 class Register(APIView):
+    """ Регистрация вользователей """
     permission_classes = [AllowAny]
 
     def post(self, request):
@@ -21,7 +22,7 @@ class Register(APIView):
 
 
 class CurrentProfile(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Информация об аутенфицированном пользователе """
 
     def get(self, request):
         serializer = AdvUserSerializer(request.user)
@@ -36,7 +37,7 @@ class CurrentProfile(APIView):
 
 
 class Profile(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Информация о выбранном пользователе """
 
     def get_object(self, pk):
         try:
@@ -51,12 +52,7 @@ class Profile(APIView):
 
 
 class PhotoOfUserList(APIView):
-    permission_classes = [IsAuthenticated, ]
-
-    def get(self, request):
-        user_photo = AvatarImageProfile.objects.all()
-        serializer = AvatarImageProfileSerializer(user_photo, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    """ Публикация фотографий на стене пользователя """
 
     def post(self, request):
         serializer = AvatarImageProfileSerializer(data=request.data, context={'request': request})
@@ -67,7 +63,7 @@ class PhotoOfUserList(APIView):
 
 
 class PhotoOfUserDetail(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Удаление фотографии пользователя """
 
     def delete(self, request, photo_pk):
         user_photo = AvatarImageProfile.objects.get(pk=photo_pk)

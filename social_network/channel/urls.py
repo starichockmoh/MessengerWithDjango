@@ -6,7 +6,7 @@ urlpatterns = [
     # Channels
     path('channels/', views.ChannelList.as_view()),
     path('channel/<int:pk>/', views.ChannelDetail.as_view()),
-    path('channel_delete_user/<int:pk>/<int:user_pk>/', views.DeleteFromChannel.as_view()),
+    path('channel_delete_user/<int:channel_pk>/<int:user_pk>/', views.DeleteFromChannel.as_view()),
     path('channel_add_delete_user/<int:pk>/', views.AddOrDeleteFromChannel.as_view()),
     path('post/', views.PostList.as_view()),
     path('post/<int:pk>/', views.PostDetail.as_view()),

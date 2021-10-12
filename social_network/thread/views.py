@@ -54,7 +54,7 @@ class ThreadArchiveOfUserFront(APIView):
         threads = Thread.objects.filter(
             Q(participants__in=[request.user]) &
             Q(archive__in=[request.user])
-        ).exclude(deleted__in=[request.user])
+        ).exclude(deleted__in=[request.user]).order_by("-date_of_last_message")
         serializer = ThreadListFrontSerializer(threads, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

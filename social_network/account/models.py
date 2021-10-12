@@ -28,6 +28,7 @@ class AvatarImageProfile(models.Model):
     user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='addit_image')
 
     class Meta:
+        db_table = 'avatar_image_profile'
         verbose_name_plural = 'Фотография пользхователя'
         verbose_name = 'Фотографии пользователей'
 

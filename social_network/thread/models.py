@@ -4,6 +4,7 @@ from account.models import AdvUser
 
 
 class Thread(models.Model):
+    """ Диалоги месенжера """
     push_notification = models.ManyToManyField(AdvUser, related_name='push_notification', blank=True)
     archive = models.ManyToManyField(AdvUser, related_name='archive', blank=True, null=True)
     participants = models.ManyToManyField(AdvUser)
@@ -11,7 +12,7 @@ class Thread(models.Model):
     date_of_last_message = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
     def get_images(self):
-        return self.messegephoto_set.all()
+        return self.messege_photo_set.all()
 
     def get_messages(self):
         return self.message_set.all()
@@ -23,11 +24,13 @@ class Thread(models.Model):
         return len(self.message_set.all())
 
     class Meta:
+        db_table = 'thread'
         verbose_name_plural = 'Диалог'
         verbose_name = 'Диалоги'
 
 
 class Message(models.Model):
+    """ Сообщения диалога """
     text = models.TextField()
     sender = models.ForeignKey(AdvUser, on_delete=models.CASCADE, related_name='sender_message')
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
@@ -42,16 +45,19 @@ class Message(models.Model):
         return self.text
 
     class Meta:
+        db_table = 'message'
         verbose_name_plural = 'Сообщение'
         verbose_name = 'Сообщения'
 
 
 class MessegePhoto(models.Model):
+    """ Фотографии, которые прикрепляют к сообщению """
     image = models.ImageField(upload_to='images/', verbose_name='Фотография сообщения')
     thread = models.ForeignKey(Thread, on_delete=models.CASCADE)
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     sender = models.ForeignKey(AdvUser, on_delete=models.CASCADE, related_name='message_photos')
 
     class Meta:
+        db_table = 'message_photo'
         verbose_name_plural = 'Фотография сообщения'
         verbose_name = 'Фотографии сообщений'

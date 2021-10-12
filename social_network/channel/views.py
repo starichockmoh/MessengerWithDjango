@@ -18,7 +18,7 @@ from django.http import Http404
 
 
 class ChannelList(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Список каналов пользователя """
     parser_classes = (MultiPartParser, FileUploadParser,)
 
     def get(self, request):
@@ -35,7 +35,7 @@ class ChannelList(APIView):
 
 
 class ChannelDetail(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Детальная информация о канале """
 
     def get_object(self, pk):
         try:
@@ -67,9 +67,8 @@ class ChannelDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# Пользоваться может только админ канала надо доделать валидацию профиля
 class DeleteFromChannel(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Удаление администратором пользователя из группы """
 
     def get_object(self, pk):
         try:
@@ -77,8 +76,8 @@ class DeleteFromChannel(APIView):
         except Channel.DoesNotExist:
             raise Http404('Not found')
 
-    def delete(self, request, pk, user_pk):
-        channel = self.get_object(pk)
+    def delete(self, request, channel_pk, user_pk):
+        channel = self.get_object(channel_pk)
         if request.user in channel.admins.all():
             user = AdvUser.objects.get(pk=user_pk)
             channel.participents.remove(user)
@@ -89,7 +88,7 @@ class DeleteFromChannel(APIView):
 
 
 class AddOrDeleteFromChannel(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Отписаться или подписаться на канал """
 
     def get_object(self, pk):
         try:
@@ -109,7 +108,7 @@ class AddOrDeleteFromChannel(APIView):
 
 
 class PostList(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Публиация постов """
 
     def get(self, request):
         posts = Post.objects.all()
@@ -125,7 +124,7 @@ class PostList(APIView):
 
 
 class PostDetail(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Детальная информация о посте """
 
     def get_object(self, pk):
         try:
@@ -155,7 +154,7 @@ class PostDetail(APIView):
 
 
 class PostPhotoList(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Публикация фотографий, которые прикрепляют к посту """
 
     def get(self, request):
         post_photo = ImagePost.objects.all()
@@ -171,7 +170,7 @@ class PostPhotoList(APIView):
 
 
 class CommentList(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Публикация коментариев поста """
 
     def post(self, request):
         serializer = CommentSerializer(data=request.data, context={'request': request})
@@ -182,7 +181,7 @@ class CommentList(APIView):
 
 
 class CommentDetail(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Редактирование и удаление коментариев """
 
     def get_object(self, pk):
         try:
@@ -205,7 +204,7 @@ class CommentDetail(APIView):
 
 
 class DeleteOrAddAdmin(APIView):
-    permission_classes = [IsAuthenticated, ]
+    """ Удаление или добавление администраторов на канал создателем канала """
 
     # Добавление пользователя в админы
     def put(self, request, channel_pk, user_pk):
