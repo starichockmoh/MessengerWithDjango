@@ -18,7 +18,7 @@ from rest_framework.parsers import MultiPartParser, FileUploadParser
 from django.http import Http404
 from django.db.models import Q
 
-from operator import attrgetter
+import json
 
 
 # Класс для создания диалога но не для просмотра
@@ -132,6 +132,8 @@ class WriteMessege(APIView):
     def get(self, request):
         messages = Message.objects.all()
         serializer = MessegeSerializer(messages, many=True)
+        messeges = json.loads(Message.objects.all())
+        print(messeges)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
