@@ -86,6 +86,6 @@ class ThreadListFrontSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Thread
-        fields = ['pk', 'last_message', 'participants', 'push_notification', 'archive', 'deleted',
+        fields = ['pk', 'last_message', 'count_messages', 'participants', 'push_notification', 'archive', 'deleted',
                   'date_of_last_message']
         read_only_fields = ['pk', 'archive']
