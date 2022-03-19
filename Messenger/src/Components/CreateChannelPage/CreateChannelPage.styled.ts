@@ -6,7 +6,7 @@ export const CreateChannelBlock = styled.div`
   z-index: 10;
   width: 20vw;
   height: 100vh;
-  background-color: white;
+  background-color: ${(props:{color: string}) => props.color};;
   form{
     text-align: center;
   }

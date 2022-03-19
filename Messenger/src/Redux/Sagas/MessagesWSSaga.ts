@@ -5,7 +5,7 @@ import {MessageType} from "../../Types/Types";
 
 export const StartChatSagaActions = {
     StartWsAC: (id: number) => ({type: "MESSAGES_WS_SAGA/START_WS", id} as const),
-    SendMessageAC: (text: string, sender: string) => ({type: "MESSAGES_WS_SAGA/SEND_CHAT_MESSAGE", sender, text} as const),
+    SendMessageAC: (text: string, sender: string, photo?: any) => ({type: "MESSAGES_WS_SAGA/SEND_CHAT_MESSAGE", sender, text,photo} as const),
     ReceiveMessage: (message: MessageType)  => ({type: "MESSAGES_WS_SAGA/RECEIVE_MESSAGE", message} as const),
     CloseWSAC: () => ({type: "MESSAGES_WS_SAGA/CLOSE_WS_CHANNEL"} as const)
 }
@@ -44,7 +44,7 @@ export function* SendMessageWSSagaWatcher() {
 
 
 function* SendMessageWorker(action: SendMessageActionType) {
-    yield call(messagesWSAPI.sendMessage, action.text, action.sender)
+    yield call(messagesWSAPI.sendMessage, action.text, action.sender,action.photo)
 }
 
 

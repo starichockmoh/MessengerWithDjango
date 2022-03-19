@@ -8,7 +8,7 @@ export const Settings = styled("div")`
   z-index: 10;
   width: 20vw;
   height: 100vh;
-  background-color: white;
+  background-color:${(props:{color: string}) => props.color};
 `
 export const UserBlock = styled("div")`
   display: grid;
@@ -48,7 +48,7 @@ export const SettingsItem = styled("div")`
   padding-top: 3%;
   padding-left: 5%;
   :hover{
-    background-color: #DCDCDC;
+    background-color: ${(props:{color: string}) => props.color};
     cursor: pointer;
   }
   

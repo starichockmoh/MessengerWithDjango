@@ -7,7 +7,7 @@ export const EditProfileBlock = styled("div")`
   z-index: 10;
   width: 20vw;
   height: 100vh;
-  background-color: white;
+  background-color: ${(props:{color: string}) => props.color};;
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -16,7 +16,7 @@ export const EditProfileBlock = styled("div")`
   overflow-y: scroll;
 `
 export const EditAvatar = styled("div")`
-  background-color: #F5F5F5;
+  background-color: ${(props:{color: string}) => props.color};;
   text-align: center;
   padding-top: 10%;
   
@@ -28,7 +28,7 @@ export const EditAvatarButton = styled(Button)`
   border-radius: 10px;
   width: 10vw;
   padding: 3%;
-  background-color: #08c;
+  background-color: ${(props:{color: string}) => props.color};
   color: white;
   overflow: hidden;
 `
@@ -40,7 +40,7 @@ export const EditItem = styled('div')`
   padding-top: 3%;
   padding-right: 5%;
   :hover{
-    background-color: #DCDCDC;
+    background-color: ${(props:{color: string}) => props.color};
     cursor: pointer;
   }
   

@@ -8,6 +8,7 @@ import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
 import {PlusOutlined} from "@ant-design/icons";
 import {AppStateType} from "../../Redux/Store";
 import {Redirect} from "react-router";
+import {WithColorType} from "../../Types/Types";
 
 
 type ValuesType = {
@@ -17,7 +18,7 @@ type ValuesType = {
 }
 
 
-export const CreateChannelPage: React.FC = () => {
+export const CreateChannelPage: React.FC<WithColorType> = ({LayOutColor}) => {
     const ChannelWasCreated = useSelector((state: AppStateType) => state.ChannelLists.IsChannelCreated)
 
     const dispatch = useDispatch()
@@ -26,7 +27,7 @@ export const CreateChannelPage: React.FC = () => {
             values.channel_title, values.channel_description))
     };
     if (ChannelWasCreated) return <Redirect to={''}/>
-    return <CreateChannelBlock>
+    return <CreateChannelBlock color = {LayOutColor}>
         <SideHeader header={'Create'}/>
         <Form name="create_channel" onFinish={onFinish}>
             <Form.Item name="channel_avatar" rules={[{required: true, message: 'This field is required'}]}>

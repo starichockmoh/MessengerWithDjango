@@ -1,15 +1,22 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import {NavLink} from "react-router-dom";
 
 export const SpecialLine = styled("hr")`
   border: none; /* Убираем границу для браузера Firefox */
-  color: #F5F5F5; /* Цвет линии для остальных браузеров */
-  background-color: #F5F5F5; /* Цвет линии для браузера Firefox и Opera */
+  color: ${(props: { color: string }) => props.color}; /* Цвет линии для остальных браузеров */
+  background-color: ${(props: { color: string }) => props.color}; /* Цвет линии для браузера Firefox и Opera */
   height: 10px; /* Толщина линии */
 `
 
 export const CustomNavLink = styled(NavLink)`
-  color: black;
+  ${(props: { color: string }) =>
+          props.color === "white" ?
+                  css`
+                    color: black;
+                  ` : css`
+                    color: white;
+                  `
+  };
 
   :hover {
     color: #08c;

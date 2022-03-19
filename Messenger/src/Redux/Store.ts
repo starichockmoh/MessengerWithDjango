@@ -6,7 +6,14 @@ import {AppReducer} from "./Reducers/AppReducer";
 import {ChannelInfoReducer} from "./Reducers/ChannelInfoReducer";
 import {ChannelListsReducer} from "./Reducers/ChannelListsReducer";
 import {AuthReducer} from "./Reducers/AuthReducer";
-import {WatchAuthSaga, WatchLoginSaga, WatchLogoutSaga} from "./Sagas/AuthSaga";
+import {
+    AppThemeSagaWorker,
+    WatchAppThemeSaga,
+    WatchAuthSaga,
+    WatchLoginSaga,
+    WatchLogoutSaga,
+    WatchRegistrSaga
+} from "./Sagas/AuthSaga";
 import {ProfileReducer} from "./Reducers/ProfileReducer";
 import {WatchAddProfilePhotoSaga, WatchProfileChangeSaga, WatchProfileSaga} from "./Sagas/ProfileSaga";
 import {DialogsReducer} from "./Reducers/DialogsReducer";
@@ -64,7 +71,10 @@ function* rootSaga() {
         spawn(SendMessageWSSagaWatcher),
         spawn(StopMessagesSagaWatcher),
         spawn(ReceiveMessageSagaWatcher),
-        spawn(WatchAddProfilePhotoSaga)
+        spawn(WatchAddProfilePhotoSaga),
+        spawn(AppThemeSagaWorker),
+        spawn(WatchAppThemeSaga),
+        spawn(WatchRegistrSaga)
     ])
 }
 sagaMiddleware.run(rootSaga)

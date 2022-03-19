@@ -5,8 +5,8 @@ import {Button} from "antd";
 export const HeaderBlock = styled("div")`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-left: 0.5px solid #CDC5BF;
-  border-right: 0.5px solid #CDC5BF;
+  border-left: 0.5px solid ${(props:{color: string}) => props.color === "white" ? "#CDC5BF" : "black" };
+  border-right: 0.5px solid ${(props:{color: string}) => props.color === "white" ? "#CDC5BF" : "black" };
   
 `
 

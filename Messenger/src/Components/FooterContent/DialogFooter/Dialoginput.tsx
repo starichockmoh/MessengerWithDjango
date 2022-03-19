@@ -22,32 +22,27 @@ export const DialogInput: React.FC<{ DialogID: number }> = () => {
 
     const UserName = useSelector((state: AppStateType) => state.Profile.AuthProfile?.username)
     const DialogID = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.pk)
-    const [InputValue, SetInputValue] = useState('')
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
 
+    const [form] = Form.useForm()
 
-    const onInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        SetInputValue(e.target.value)
-    }
-
-
-    const SendMessage = () => {
+    const onFinish = (values: any) => {
         if (UserName) {
-            dispatch(StartChatSagaActions.SendMessageAC(InputValue, UserName))
-            SetInputValue('')
+            dispatch(StartChatSagaActions.SendMessageAC(values.dialog_input_text, UserName))
+                // , values.dialog_input_photos.fileList[0]))
         }
+        form.resetFields()
     }
 
+    const [isUploading, SetUploading] = useState(false)
 
-    return <DialogInputBlock name={'dialog_input'}>
-        <Form.Item name={'dialog_input_photos'}>
-            <Upload name="dialog_input_photos" maxCount={10} listType={"text"}>
-                <DialogInputButton type={"link"} icon={<PaperClipIcon/>}/>
-            </Upload>
+
+    return <DialogInputBlock name={'dialog_input'} onFinish={onFinish} form={form} color={LayOutColor}>
+        <Form.Item>
+                <DialogInputButton onClick={() => SetUploading(true)} type={"link"} icon={<PaperClipIcon/>}/>
         </Form.Item>
         <Form.Item name={"dialog_input_text"}>
             <DialogTextArea
-                // onChange={onInputChange}
-                // value={InputValue}
                 bordered={false}
                 autoSize={{maxRows: 1}}
                 placeholder={'Write a message...'}/>
@@ -55,11 +50,20 @@ export const DialogInput: React.FC<{ DialogID: number }> = () => {
         <Form.Item name={"dialog_input_smiles"}>
             <DialogInputButton type={"link"} icon={<SmileIcon/>}/>
         </Form.Item>
-        <Form.Item>
-            {InputValue
-                ? <DialogInputButton onClick={SendMessage} type={"link"} icon={<SendIcon/>}/>
-                : <DialogInputButton type={"link"} icon={<AudioIcon/>}/>}
+        <Form.Item
+            noStyle
+            shouldUpdate={(prevValues, currentValues) => prevValues.dialog_input_text !== currentValues.dialog_input_text}>
+            {({getFieldValue}) => {
+                return getFieldValue('dialog_input_text')
+                    ? <DialogInputButton htmlType={"submit"} type={"link"} icon={<SendIcon/>}/>
+                    : <DialogInputButton type={"link"} icon={<AudioIcon/>}/>
+            }}
         </Form.Item>
-        {/*<DialogUpload/>*/}
+        {/*<Form.Item noStyle shouldUpdate={isUploading}>*/}
+        {/*    {() => {*/}
+        {/*        return <DialogUpload/>*/}
+        {/*    }}*/}
+        {/*</Form.Item>*/}
+
     </DialogInputBlock>
 }

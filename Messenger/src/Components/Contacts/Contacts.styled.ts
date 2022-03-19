@@ -10,7 +10,7 @@ export const ContactsBlock = styled("div")`
   z-index: 10;
   width: 20vw;
   height: 100vh;
-  background-color: white;
+  background-color: ${(props:{color: string}) => props.color};
 `
 export const SearchBlock = styled("div")`
   display: grid;
@@ -32,7 +32,7 @@ export const Contact = styled("div")`
   padding-bottom: 3%;
   padding-left: 5%;
   :hover{
-    background-color: #DCDCDC;
+    background-color: ${(props:{color: string}) => props.color};
     cursor: pointer;
   }
 `

@@ -15,4 +15,5 @@ urlpatterns = [
     path('profile/<int:pk>/', views.Profile.as_view()),
     path('photo_of_user/', views.PhotoOfUserList.as_view()),
     path('photo_of_user/<int:photo_pk>/', views.PhotoOfUserDetail.as_view()),
+
 ]

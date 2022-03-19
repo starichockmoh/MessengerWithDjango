@@ -14,7 +14,7 @@ export const ArchivedChannelsBlock = styled("div")`
   z-index: 10;
   width: 20vw;
   height: 100vh;
-  background-color: white;
+  background-color: ${(props:{color: string}) => props.color};;
   overflow-y: scroll;
 `
 export const BackButton = styled(Button)`
@@ -31,7 +31,7 @@ export const ArchivedChannelsHeader = styled.div`
   align-items: center;
   top: 0;
   z-index: 15;
-  background: white;
+  background-color: ${(props:{color: string | undefined}) => props.color};
   div{
     font-weight: 600;
     font-size: 120%;

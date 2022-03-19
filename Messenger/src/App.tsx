@@ -5,15 +5,15 @@ import {BrowserRouter, withRouter} from "react-router-dom";
 import {Layout} from "./Components/Layout/Layout";
 import "./Components/LeftSideBar/AnimationSideBar.css"
 import {LeftSideBar} from "./Components/LeftSideBar/LeftSideBar";
-import {LoginPage} from "./Components/Login/LoginPage";
 import {ActivateAuthSaga} from "./Redux/Sagas/AuthSaga";
+import Login from "./Components/Login/Login";
 
 
 const App = () => {
     const isAuth = useSelector((state: AppStateType) => state.Auth.isAuth)
     const isInit  = useSelector((state: AppStateType) => state.App.isInit)
+    const LayOutColor  = useSelector((state: AppStateType) => state.App.LayOutColor)
     const dispatch = useDispatch()
-
     useEffect(() => {
         dispatch(ActivateAuthSaga.Auth())
     }, [])
@@ -21,11 +21,11 @@ const App = () => {
     if (!isInit) return <div>
         Init...
     </div>
-    if (isAuth && isInit) return <>
+    if (isAuth && isInit) return <div style={{color: LayOutColor === "white" ? "black" : "white"}}>
         <LeftSideBar/>
         <Layout/>
-    </>
-    return <LoginPage/>
+    </div>
+    return <Login/>
 }
 const AppRouter = withRouter(App)
 const AppContainer = () => {

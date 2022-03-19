@@ -9,10 +9,9 @@ export const FooterComponent: React.FC = () => {
     const ChannelData = useSelector((state: AppStateType) => state.ChannelLists.CurrentChannel)
     const DialogData = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog)
 
-    // if (!!ChannelData) return <ChannelFooter ChannelData = {ChannelData}/>
-    // else if (!!DialogData) return <DialogInput DialogID = {DialogData.pk}/>
-    // return <>
-    // </>
-    return <DialogInput DialogID = {5}/>
+    if (!!ChannelData) return <ChannelFooter ChannelData = {ChannelData}/>
+    else if (!!DialogData) return <DialogInput DialogID = {DialogData.pk}/>
+    return <>
+    </>
 
 }

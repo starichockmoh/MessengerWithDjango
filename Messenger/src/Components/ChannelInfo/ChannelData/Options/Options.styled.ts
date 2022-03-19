@@ -11,7 +11,7 @@ export const OptionContent = styled("div")`
   padding-top: 3%;
   padding-bottom: 3%;
   :hover{
-    background-color: #DCDCDC;
+    background-color: ${(props: {color: string}) => props.color};;
     cursor: pointer;
   }
 `

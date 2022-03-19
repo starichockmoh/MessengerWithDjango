@@ -2,7 +2,7 @@ import styled from "styled-components";
 import {NavLink} from "react-router-dom";
 
 export const SettingsHeader = styled("div")`
-  background-color: #08c;
+  background-color: ${(props:{color: string}) => props.color};
   height: 7vh;
   position: sticky;
   top: 0;

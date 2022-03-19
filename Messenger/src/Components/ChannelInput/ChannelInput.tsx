@@ -6,13 +6,15 @@ import {DownOutlined} from "@ant-design/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../Redux/Store";
 import {ChannelListsAC} from "../../Redux/Reducers/ChannelListsReducer"
+import {WithColorType} from "../../Types/Types";
+
 const {SetList} = ChannelListsAC
 
 
 export type SearchStatusType = 'Focus' | null
 
 
-export const ChannelInput:React.FC = () => {
+export const ChannelInput: React.FC<WithColorType> = ({LayOutColor, AdditionalColor}) => {
     const dispatch = useDispatch()
     const channelListsMenu = <Menu>
         <Menu.Item key="0" onClick={() => dispatch(SetList("CHANNELS"))}>Channels</Menu.Item>
@@ -21,14 +23,24 @@ export const ChannelInput:React.FC = () => {
     const CurrentList = useSelector((state: AppStateType) => state.ChannelLists.CurrentList)
     const [SearchStatus, SetSearchStatus] = useState<SearchStatusType>(null)
     return <SearchBlock>
-        <CustomNavLink to={'/menu'}>
+        <CustomNavLink to={'/menu'} color={LayOutColor}>
             <MenuButton icon={<MenuButtonIcon/>} type={'link'}/>
         </CustomNavLink>
         <Dropdown overlay={channelListsMenu} trigger={['click']} placement={'bottomRight'}>
-            <Button icon={<DownOutlined/>} type={"link"}>{CurrentList === "CHANNELS"? "Channels": 'Dialogs' }</Button>
+            <Button style={{color: "gray"}}
+                    icon={<DownOutlined/>}
+                    type={"link"}>
+                {CurrentList === "CHANNELS" ? "Channels" : 'Dialogs'}
+            </Button>
         </Dropdown>
-        <ChannelInputSearch allowClear={SearchStatus === 'Focus'} SearchStatus = {SearchStatus}
-                            placeholder={'Search...'} onFocus ={() => SetSearchStatus('Focus')}
-                             onBlur={() => SetSearchStatus(null)}/>
+        <ChannelInputSearch allowClear={SearchStatus === 'Focus'}
+                            SearchStatus={SearchStatus}
+                            placeholder={'Search...'}
+                            onFocus={() => SetSearchStatus('Focus')}
+                            onBlur={() => SetSearchStatus(null)}
+                            Color={LayOutColor}
+                            ActiveColor={AdditionalColor}
+                            bordered={false}
+        />
     </SearchBlock>
 }

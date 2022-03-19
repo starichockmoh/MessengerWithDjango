@@ -1,4 +1,4 @@
-import {call, put, SagaReturnType, take, delay, fork, takeEvery} from "redux-saga/effects"
+import {call, put, SagaReturnType, take, delay, takeEvery} from "redux-saga/effects"
 import {authAPI} from "../../Api/AuthAPI";
 import {AuthAC} from "../Reducers/AuthReducer";
 import {AppAC} from "../Reducers/AppReducer";
@@ -6,11 +6,14 @@ import {ProfileAC} from "../Reducers/ProfileReducer";
 import {ChannelListsAC} from "../Reducers/ChannelListsReducer";
 import {DialogsAC} from "../Reducers/DialogsReducer";
 import {ContentAC} from "../Reducers/ContentReducer";
+import {AuthUserProfileType} from "../../Types/Types";
 
 export const ActivateAuthSaga = {
     Login: (password: string, name: string) => ({type: "AUTH_SAGAS/LOGIN", password, name} as const),
     Logout: () => ({type: "AUTH_SAGAS/LOGOUT"} as const),
-    Auth: () => ({type: "AUTH_SAGAS/AUTH"} as const)
+    Auth: () => ({type: "AUTH_SAGAS/AUTH"} as const),
+    AppTheme: (theme: string) => ({type: "AUTH_SAGAS/APP_THEME", theme} as const),
+    Registr: (username:string, password:string, email:string) => ({type: "AUTH_SAGAS/REGISTR", username, password, email} as const)
 }
 
 type LoginData = SagaReturnType<typeof authAPI.login>
@@ -28,6 +31,7 @@ export function* WatchLoginSaga() {
             yield delay(5000)
             yield put(AuthAC.SetError(''))
         }
+        yield call(AppThemeSagaWorker)
         yield call(AuthSagaWorker)
     }
 }
@@ -36,8 +40,6 @@ export function* WatchLoginSaga() {
 export function* WatchAuthSaga() {
     yield takeEvery("AUTH_SAGAS/AUTH", AuthSagaWorker)
 }
-
-
 
 
 export function* AuthSagaWorker() {
@@ -70,4 +72,42 @@ export function* WatchLogoutSaga() {
         yield put(ContentAC.SetContentState(null))
         yield put(AuthAC.SetAuth(false))
     }
+}
+
+export function* WatchRegistrSaga() {
+    while (true) {
+        const {username, password, email} = yield take("AUTH_SAGAS/REGISTR")
+        try{
+            const data: AuthUserProfileType = yield call(authAPI.registr, username,password,email)
+            yield put(AuthAC.SetCreatedUser(true))
+            yield put(AuthAC.SetCreatedUser(false))
+            console.log(data)
+        }catch (e){
+
+        }
+    }
+}
+
+export function* WatchAppThemeSaga() {
+    while (true) {
+        const {theme} = yield take("AUTH_SAGAS/APP_THEME")
+        try {
+            yield call(() => localStorage.setItem('app_theme', theme))
+            yield call(AppThemeSagaWorker)
+        } catch (error: any) {
+
+        }
+
+    }
+}
+
+
+export function* AppThemeSagaWorker() { //стартовая инициализация темы
+    let Theme = localStorage.getItem("app_theme")
+
+    if (!Theme) {
+        yield call(() => localStorage.setItem('app_theme', "day"))
+        Theme = "day"
+    }
+    yield put(AppAC.SetTheme(Theme))
 }

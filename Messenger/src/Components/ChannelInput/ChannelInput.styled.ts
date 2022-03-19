@@ -5,10 +5,12 @@ import {MenuUnfoldOutlined} from "@ant-design/icons";
 
 type PropsType = {
     SearchStatus: SearchStatusType
+    ActiveColor: string | undefined
+    Color: string
 }
 
 export const ChannelInputSearch = styled(Input)`
-  background-color: ${(props: PropsType) => props.SearchStatus === 'Focus' ? 'white' : '#DCDCDC'};
+  background-color: ${(props: PropsType) => props.SearchStatus === 'Focus' ? props.Color : props.ActiveColor};
   height: 28px;
   margin: 10px;
 `

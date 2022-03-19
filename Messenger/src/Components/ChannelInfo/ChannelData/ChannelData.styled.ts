@@ -82,7 +82,7 @@ export const MediaContent = styled("div")`
   padding-bottom: 3%;
   grid-template-columns: 1fr 4fr;
   :hover{
-    background-color: #DCDCDC;
+    background-color: ${(props: {color: string}) => props.color};;
     cursor: pointer;
   }
 `

@@ -31,5 +31,12 @@ class AvatarImageProfile(models.Model):
         verbose_name_plural = 'Фотография пользхователя'
         verbose_name = 'Фотографии пользователей'
 
+# class BackgroundImage(models.Model):
+#     image = models.ImageField(upload_to='images/', verbose_name='Фотография пользователя')
+#     user = models.ForeignKey(AdvUser, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='addit_image')
+#
+#     class Meta:
+#         verbose_name_plural = 'Фотография пользхователя'
+#         verbose_name = 'Фотографии пользователей'
 
 

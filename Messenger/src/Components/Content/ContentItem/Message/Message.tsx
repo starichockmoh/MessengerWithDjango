@@ -1,6 +1,8 @@
 import React from "react";
 import {MessageBlock, MessageData, MessageInfo, TickIcon} from "./Message.styled"
 import {Image} from "antd";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../../../Redux/Store";
 
 type PropsType = {
     Text?: string
@@ -11,7 +13,8 @@ type PropsType = {
     IsFriend: boolean
 }
 export const Message: React.FC<PropsType> = ({Media, Text, Date, IsFriend}) => {
-    return <MessageBlock IsFriend={IsFriend}>
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
+    return <MessageBlock IsFriend={IsFriend} color={LayOutColor}>
         <div>
             <MessageInfo>
                 {Text}

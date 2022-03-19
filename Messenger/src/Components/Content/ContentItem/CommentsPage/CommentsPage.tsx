@@ -17,6 +17,7 @@ export const CommentsPage: React.FC<PropsType> = ({SetPage}) => {
 
     const CommentsData = useSelector((state: AppStateType) => state.Content.Comments)
     const CurrentUserID =  useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
 
     const CommentsItems = CommentsData?.map(c => <CommentItem Text={c.text}
                                                               Author={'ХУй Морж'} Avatar={photo1}
@@ -24,7 +25,7 @@ export const CommentsPage: React.FC<PropsType> = ({SetPage}) => {
                                                               key={c.id}/>)
 
     return <CommentsBlock>
-        <CommentsHeader>
+        <CommentsHeader color={LayOutColor}>
             <Button type={"link"} icon={<ArrowLeftOutlined/>} onClick={() => SetPage('POSTS')}/>
             Comments
         </CommentsHeader>

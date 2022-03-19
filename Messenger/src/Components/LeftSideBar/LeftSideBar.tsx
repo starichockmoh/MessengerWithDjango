@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {} from "./LeftSideBar.styled"
 import {BrowserRouter, Route, Switch, useHistory} from "react-router-dom";
 import {Menu} from "../Menu/Menu";
 import {SettingsPage} from "../Settings/SettingsPage/SettingsPage";
@@ -11,6 +10,18 @@ import {EditProfile} from "../EditProfile/EditProfile";
 import {ArchivedChannelList} from "../ChannelsList/ArchivedChannelList";
 import {Exit} from "../Exit/Exit";
 import {CreateChannelPage} from "../CreateChannelPage/CreateChannelPage";
+import {WithColor} from "../../HOC/withColor";
+
+
+const MenuWithColor = WithColor(Menu)
+const SettingsPageWithColor = WithColor(SettingsPage)
+const CallsWithColor = WithColor(Calls)
+const ContactsWithColor = WithColor(Contacts)
+const EditProfileWithColor = WithColor(EditProfile)
+const CreateChannelPageWithColor = WithColor(CreateChannelPage)
+const ExitWithColor = WithColor(Exit)
+const ArchivedChannelListWithColor = WithColor(ArchivedChannelList)
+
 
 export const LeftSideBar: React.FC = () => {
     const history = useHistory()
@@ -22,30 +33,29 @@ export const LeftSideBar: React.FC = () => {
     }, [path])
     return <>
         <CSSTransition unmountOnExit in={CurrentPage==="settings"} classNames={'sideBar'} timeout={300}>
-            <SettingsPage/>
+            <SettingsPageWithColor/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="menu"} classNames={'sideBar'} timeout={300}>
-            <Menu/>
+            <MenuWithColor/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="calls"} classNames={'sideBar'} timeout={300}>
-            <Calls/>
+            <CallsWithColor/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="contacts"} classNames={'sideBar'} timeout={300}>
-            <Contacts/>
+            <ContactsWithColor/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="edit_profile"} classNames={'sideBar'} timeout={300}>
-            <EditProfile/>
+            <EditProfileWithColor/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="archived_chats"} classNames={'sideBar'} timeout={300}>
-            <ArchivedChannelList/>
+            <ArchivedChannelListWithColor/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="new_channel"} classNames={'sideBar'} timeout={300}>
-            <CreateChannelPage/>
+            <CreateChannelPageWithColor/>
         </CSSTransition>
         <CSSTransition unmountOnExit in={CurrentPage==="exit"} classNames={'sideBar'} timeout={300}>
-           <Exit/>
+           <ExitWithColor/>
         </CSSTransition>
     </>
-
 
 }

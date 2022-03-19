@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import pixel from "../../Assets/pixel_mount.jpg"
 
 export const AppLayout = styled("div")`
   display: grid;
@@ -11,28 +12,34 @@ export const AppLayout = styled("div")`
 
 export const Search = styled("div")`
   grid-area: Search;
+  background-color: ${(props:{color: string}) => props.color};
  
 `
 export const ChannelHeader = styled("div")`
   grid-area: ChannelHeader;
+  background-color: ${(props:{color: string}) => props.color};
  
 `
 export const InfoHeader = styled("div")`
   grid-area: InfoHeader;
   font-weight: 600;
   padding: 10px;
+  background-color: ${(props:{color: string}) => props.color};
 `
 export const Channels = styled("div")`
   grid-area: Channels;
+  background-color: ${(props:{color: string}) => props.color};
 `
 export const Content = styled("div")`
   grid-area: Content;
-  background-image: url("https://falcon-eyes.ru/upload/iblock/8f6/8f667926e00feb79ed462cda767633af.jpg");
+  background-image: url(${pixel});
 `
 export const Info = styled("div")`
   grid-area: Info;
+  background-color: ${(props:{color: string}) => props.color};
 `
 
 export const Footer = styled("div")`
   grid-area: Footer;
+  background-color: ${(props:{color: string}) => props.color};
 `

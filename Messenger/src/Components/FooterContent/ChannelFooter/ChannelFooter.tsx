@@ -24,7 +24,10 @@ export const ChannelFooter: React.FC<PropsType> = ({ChannelData}) => {
     const onInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         SetInputValue(e.target.value)
     }
+
     const CurrentUserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
+
     const AdminsID = [] as Array<number>
     ChannelData.admins.forEach(a => {
         AdminsID.push(a.pk)
@@ -34,7 +37,7 @@ export const ChannelFooter: React.FC<PropsType> = ({ChannelData}) => {
         SetInputValue('')
     }
     const IsAdmin = CurrentUserID? AdminsID.indexOf(CurrentUserID) >= 0 : false
-    if (IsAdmin) return <DialogInputBlock>
+    if (IsAdmin) return <DialogInputBlock color = {LayOutColor}>
         <DialogInputButton type={"link"} icon = {<PaperClipIcon/>}/>
         <DialogTextArea onChange={onInputChange}
                         value={InputValue} bordered={false}
@@ -45,7 +48,7 @@ export const ChannelFooter: React.FC<PropsType> = ({ChannelData}) => {
             ? <DialogInputButton onClick={CreatePost} type={"link"} icon = {<SendIcon/>}/>
             : <DialogInputButton type={"link"} icon = {<AudioIcon/>}/>}
     </DialogInputBlock>
-    return <MuteBlock>
+    return <MuteBlock color={LayOutColor}>
         <MuteButton type={"link"}>MUTE</MuteButton>
     </MuteBlock>
 }

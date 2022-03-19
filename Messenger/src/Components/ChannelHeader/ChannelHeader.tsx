@@ -43,8 +43,10 @@ const channelMenu = <Menu>
 export const Header: React.FC<PropsType> = ({subscribers, name, isChannel, lastData}) => {
     const ChannelData = useSelector((state: AppStateType) => state.ChannelLists.CurrentChannel)
     const DialogUser = useSelector((state: AppStateType) => state.Dialogs.DialogUser)
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
 
-    return <HeaderBlock>
+
+    return <HeaderBlock color={LayOutColor}>
         <div>
             <Name>
                 {!!ChannelData ? ChannelData.title : !!DialogUser ? DialogUser.username : ''}

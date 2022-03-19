@@ -1,6 +1,7 @@
 import React from "react";
-import {CustomNavLink} from "../../../Common/CommonElements.styled";
 import {OptionContent} from "./Options.styled"
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../../../Redux/Store";
 
 type PropsType = {
     Option: string
@@ -10,7 +11,8 @@ type PropsType = {
     }
 }
 export const OptionElement: React.FC<PropsType> = ({AddStyle, Option}) => {
-    return <OptionContent>
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+    return <OptionContent color={AdditionalColor}>
         <br/>
         <div style={AddStyle}>
             {Option}

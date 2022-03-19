@@ -16,7 +16,7 @@ export const CommentsHeader = styled.div`
   position: sticky;
   top: 0;
   z-index: 15;
-  background: white;
+  background: ${(props: {color: string}) => props.color};
   left: 0;
   padding: 10px;
   font-size: 120%;
@@ -28,18 +28,23 @@ export const CommentsHeader = styled.div`
 `
 
 
+type CommentBlockPropsType = {
+    IsOtherUser: boolean
+    color: string
+}
+
 export const CommentBlock = styled.div`
   display: flex;
   flex-direction: row;
   margin: 8px 10px;
   align-items: center;
-  justify-content: ${(props: { IsOtherUser: boolean }) => props.IsOtherUser ? 'flex-start' : 'flex-end'};
+  justify-content: ${(props: CommentBlockPropsType) => props.IsOtherUser ? 'flex-start' : 'flex-end'};
 
   div {
     border-radius: 5px;
     padding: 2px;
     word-break: break-word;
-    background: white;
+    background: ${(props: CommentBlockPropsType) => props.color};
     display: flex;
     align-items: baseline;
     margin-left: 5px;

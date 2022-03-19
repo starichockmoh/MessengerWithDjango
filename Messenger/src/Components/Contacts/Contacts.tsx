@@ -16,13 +16,17 @@ import photo1 from "./../../Assets/amds.jpg"
 import photo2 from "./../../Assets/maska.jpg"
 import photo3 from "./../../Assets/putin.jpeg"
 import photo4 from "./../../Assets/krest.jpg"
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../Redux/Store";
+import {WithColorType} from "../../Types/Types";
 
-export const Contacts: React.FC = () => {
+export const Contacts: React.FC<WithColorType> = ({LayOutColor}) => {
     const [InputValue, SetInputValue] = useState('')
     const onInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         SetInputValue(e.target.value)
     }
-    return <ContactsBlock>
+
+    return <ContactsBlock color={LayOutColor}>
         <SideHeader header={'Contacts'}/>
         <SearchBlock>
             <SearchIcon/>
@@ -63,7 +67,8 @@ type ContactPropsType = {
     Photo: string
 }
 const ContactElement: React.FC<ContactPropsType> = ({Data, Name, Photo}) => {
-    return <Contact>
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+    return <Contact color={AdditionalColor}>
         <ContactAvatar src={Photo}/>
         <div>
             <ContactsUserName>

@@ -1,0 +1,46 @@
+.DialogUploadBlock {
+    position: absolute;
+    left: 38%;
+    width: 24%;
+    top: 20%;
+    height: 60%;
+    background: white;
+    border-radius: 3px;
+    font-family: 'Muli', sans-serif;
+    overflow: hidden;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    padding: 0 20px;
+
+}
+.slide {
+    flex: 1;
+    height: 70vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 5px;
+    border-radius: 10px;
+    background-position: center;
+    color: white;
+    position: relative;
+    cursor: pointer;
+    transition: all 500ms ease-in-out
+}
+
+.slide_active {
+    flex: 10;
+}
+.slide:hover {
+    transform: scale(1.1);
+    z-index: 2;
+}
+
+.slide_active:hover {
+    transform: none;
+}

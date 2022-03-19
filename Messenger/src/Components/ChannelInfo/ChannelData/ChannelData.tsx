@@ -30,6 +30,8 @@ export const ChannelData: React.FC<PropsType> = ({ChangePage}) => {
     const DialogData = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog)
     const ChannelData = useSelector((state: AppStateType) => state.ChannelLists.CurrentChannel)
     const DialogUser = useSelector((state: AppStateType) => state.Dialogs.DialogUser)
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+    console.log(AdditionalColor)
 
     const AvatarsLen = DialogUser?.addit_image.length
 
@@ -41,7 +43,7 @@ export const ChannelData: React.FC<PropsType> = ({ChangePage}) => {
             Avatar={DialogData && DialogUser && AvatarsLen
                 ? ToCorrectImage(DialogUser.addit_image[AvatarsLen - 1].image)
                 : ChannelData ? ToCorrectImage(ChannelData.avatar) : ''}/>
-        <SpecialLine/>
+        <SpecialLine color={AdditionalColor}/>
         {ChannelData
             ? <Description isAdmin={true}
                          isChannel={true}
@@ -55,7 +57,7 @@ export const ChannelData: React.FC<PropsType> = ({ChangePage}) => {
                                  Mobile: DialogUser ? ToNicePhoneNumber(DialogUser.telephone) : ''
                              }}/>
                 : null }
-        <SpecialLine/>
+        <SpecialLine color={AdditionalColor}/>
         <MediaBlock>
             <MediaElement Icon={ImageIcon} Count={'5678 photos'} ChangePage={() => ChangePage('IMAGES')}/>
             <MediaElement Icon={VideoIcon} Count={'300 videos'} ChangePage={() => ChangePage('IMAGES')}/>
@@ -63,7 +65,7 @@ export const ChannelData: React.FC<PropsType> = ({ChangePage}) => {
             <MediaElement Icon={AudioIcon} Count={'5678 photos'} ChangePage={() => ChangePage('IMAGES')}/>
             <MediaElement Icon={VoiceIcon} Count={'3 voice messages'} ChangePage={() => ChangePage('IMAGES')}/>
         </MediaBlock>
-        <SpecialLine/>
+        <SpecialLine color={AdditionalColor}/>
         {ChannelData ? <ChannelOptions/> : DialogData ? <DialogOptions/> : null}
     </ChannelInfoBlock>
 }
@@ -75,7 +77,8 @@ type MediaElementPropsType = {
     ChangePage: () => void
 }
 const MediaElement: React.FC<MediaElementPropsType> = ({Count, Icon, ChangePage}) => {
-    return <MediaContent onClick={ChangePage}>
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+    return <MediaContent onClick={ChangePage} color={AdditionalColor}>
         <IconBlock>
             <Icon/>
         </IconBlock>

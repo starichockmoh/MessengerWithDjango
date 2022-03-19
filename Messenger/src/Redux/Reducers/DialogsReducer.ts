@@ -51,7 +51,7 @@ export const DialogsReducer = (state= InitialState, action: DialogsACType | Mess
                     }
                 }
                 let TmpDialog = CopyDialogs.splice(ArrNum, 1)[0]
-                TmpDialog.get_messeges.push(action.message)
+                TmpDialog.last_message = action.message
                 CopyDialogs.unshift(TmpDialog)
                 return {
                     ...state,
@@ -64,7 +64,7 @@ export const DialogsReducer = (state= InitialState, action: DialogsACType | Mess
         case "DIALOGS/SET_MESSAGE":
             if (!!state.CurrentDialog) {
                 const Dialog: DialogDetailsType = {
-                    get_messeges: [...state.CurrentDialog.get_messeges, action.message],
+                    get_messages: [...state.CurrentDialog.get_messages, action.message],
                     pk: state.CurrentDialog.pk,
                     participants: state.CurrentDialog.participants,
                     archive: state.CurrentDialog.archive,

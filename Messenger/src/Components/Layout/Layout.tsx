@@ -8,30 +8,34 @@ import {DialogInput} from "../FooterContent/DialogFooter/Dialoginput";
 import {ChannelInfo} from "../ChannelInfo/ChannelInfo";
 import {ContentBlock} from "../Content/Content";
 import {FooterComponent} from "../FooterContent/FooterComponent";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../Redux/Store";
+import {WithColor} from "../../HOC/withColor";
 
-
+const ChannelInputWithColors = WithColor(ChannelInput)
 
 export const Layout: React.FC = () => {
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
     return <AppLayout>
-        <Search>
-            <ChannelInput/>
+        <Search color={LayOutColor}>
+            <ChannelInputWithColors/>
         </Search>
-        <ChannelHeader>
+        <ChannelHeader color={LayOutColor}>
             <Header isChannel={true} name={'1337 const'} subscribers={46000}/>
         </ChannelHeader>
-        <InfoHeader>
+        <InfoHeader color={LayOutColor}>
             Channel Info
         </InfoHeader>
-        <Channels>
+        <Channels color={LayOutColor}>
             <ChannelList/>
         </Channels>
         <Content>
             <ContentBlock/>
         </Content>
-        <Info>
+        <Info color={LayOutColor}>
             <ChannelInfo/>
         </Info>
-        <Footer>
+        <Footer color={LayOutColor}>
             <FooterComponent/>
         </Footer>
     </AppLayout>

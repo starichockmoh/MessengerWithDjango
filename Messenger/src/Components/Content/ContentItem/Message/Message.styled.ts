@@ -1,7 +1,10 @@
 import styled from "styled-components";
 import {CheckOutlined} from "@ant-design/icons";
 
-
+type MessageBlockType = {
+    IsFriend: boolean
+    color: string
+}
 
 export const MessageBlock = styled("div")`
   margin: 10px;
@@ -10,11 +13,11 @@ export const MessageBlock = styled("div")`
   
 
   div {
-    align-self: ${(props: {IsFriend: boolean}) => props.IsFriend ? 'flex-start' : 'flex-end'};
+    align-self: ${(props: MessageBlockType) => props.IsFriend ? 'flex-start' : 'flex-end'};
     border-radius: 5px;
     padding: 5px;
     word-break: break-word;
-    background: white;
+    background:  ${(props: MessageBlockType) => props.color};
     display: flex;
     align-items: baseline;
     

@@ -16,27 +16,28 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../Redux/Store";
 import {ActivateProfileSaga} from "../../../Redux/Sagas/ProfileSaga";
 import {ToCorrectImage} from "../../../Helper Functions/ToCorrectImage";
+import {WithColorType} from "../../../Types/Types";
 
-export const SettingsPage: React.FC = () => {
+export const SettingsPage: React.FC<WithColorType> = ({LayOutColor}) => {
     const dispatch = useDispatch()
     const UserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
-
     useEffect(() => {
         UserID && dispatch(ActivateProfileSaga.Profile(UserID))
     }, [UserID])
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
 
     const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
     const UserAvatar = UserData?.addit_image[UserData.addit_image.length - 1]?.image
-    return <Settings>
+    return <Settings color={LayOutColor}>
         <SideHeader header={'Settings'}/>
         {UserData && <UserProfile Avatar={UserAvatar? ToCorrectImage(UserAvatar) : ''} Name={UserData.username} Is_online={UserData.is_online}/>}
-        <SpecialLine/>
+        <SpecialLine color={AdditionalColor}/>
         <SettingsElement Setting={'Edit profile'} Icon={EditIcon} Link={'/edit_profile'}/>
         <SettingsElement Setting={'Security'} Icon={SecurityIcon} Link={'/edit_profile'}/>
         <SettingsElement Setting={'Chats'} Icon={ChatIcon} Link={'/edit_profile'}/>
         <SettingsElement Setting={'Folders'} Icon={FoldersIcon} Link={'/edit_profile'}/>
         <SettingsElement Setting={'Advanced'} Icon={AdvancedIcon} Link={'/edit_profile'}/>
-        <SpecialLine/>
+        <SpecialLine color={AdditionalColor}/>
         <SettingsElement Setting={'FAQ'} Icon={FAQIcon} Link={'/edit_profile'}/>
         <SettingsElement Setting={'Ask a Question'} AddStyle={{color: "#08c"}} Link={'/edit_profile'}/>
     </Settings>
@@ -72,10 +73,12 @@ type SettingsElementPropsType = {
 }
 const SettingsElement: React.FC<SettingsElementPropsType> =
     ({Setting, Icon, AddStyle, Link}) => {
-        return <SettingsItem>
+        const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+        const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
+        return <SettingsItem color = {AdditionalColor}>
             {Icon ? <Icon/> : <div/>}
             <div style={AddStyle}>
-                <CustomNavLink to={Link} style={AddStyle}>
+                <CustomNavLink to={Link} style={AddStyle} color={LayOutColor}>
                     {Setting}
                 </CustomNavLink>
             </div>

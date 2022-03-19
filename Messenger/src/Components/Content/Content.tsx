@@ -52,7 +52,7 @@ export const ContentBlock: React.FC = () => {
         Views={p.views} CommentsCount={p.get_comments.length}
         SetPage={SetContentState}/>)
 
-    const MessagesData = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.get_messeges)
+    const MessagesData = useSelector((state: AppStateType) => state.Dialogs.CurrentDialog?.get_messages)
     const MessagesItems = MessagesData?.map((m, index) => <Message
         Date={ToNiceDate(m.datetime)}
         key={index}

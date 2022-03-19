@@ -6,7 +6,7 @@ export const ExitBlock = styled.div`
   z-index: 10;
   width: 20vw;
   height: 100vh;
-  background-color: white;
+  background-color: ${(props:{color: string}) => props.color};;
 `
 
 export const ExitContent = styled.div`

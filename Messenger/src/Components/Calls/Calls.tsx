@@ -8,9 +8,12 @@ import photo3 from "./../../Assets/putin.jpeg"
 import photo4 from "./../../Assets/krest.jpg"
 import {SideHeader} from "../LeftSideBar/SideHeader";
 import {StyledComponent} from "styled-components";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../Redux/Store";
+import {WithColorType} from "../../Types/Types";
 
-export const Calls: React.FC = () => {
-    return <CallsBlock>
+export const Calls: React.FC<WithColorType> = ({LayOutColor}) => {
+    return <CallsBlock color={LayOutColor}>
         <SideHeader header={'Calls'}/>
         <Call Name={'SevaBor'} Icon={PhoneIcon} Avatar={photo} LastData={'june 1 at 10:56'}/>
         <Call Name={'Catik'} Icon={VideoIcon} Avatar={photo1} LastData={'april 1 at 10:00'}/>
@@ -38,7 +41,8 @@ type CallsItemPropsType = {
 }
 
 const Call: React.FC<CallsItemPropsType> = ({Avatar, Icon, Name, LastData}) => {
-    return <CallsItem>
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+    return <CallsItem color={AdditionalColor}>
         <CallAvatar src={Avatar}/>
         <div>
             <CallUserName>

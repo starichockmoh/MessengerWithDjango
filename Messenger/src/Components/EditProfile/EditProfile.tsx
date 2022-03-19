@@ -16,12 +16,16 @@ import {AppStateType} from "../../Redux/Store";
 import {ActivateProfileSaga} from "../../Redux/Sagas/ProfileSaga";
 import {ToCorrectImage} from "../../Helper Functions/ToCorrectImage";
 import {useForm} from "antd/es/form/Form";
+import {WithColorType} from "../../Types/Types";
+import {SpecialLine} from "../Common/CommonElements.styled";
 
 
 
-export const EditProfile: React.FC = () => {
+export const EditProfile: React.FC<WithColorType> = ({LayOutColor}) => {
     const dispatch = useDispatch()
     const UserID = useSelector((state: AppStateType) => state.Profile.AuthProfile?.pk)
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+    const AdditionalColorActive = useSelector((state: AppStateType) => state.App.AdditionalColorActive)
 
     useEffect(() => {
         UserID && dispatch(ActivateProfileSaga.Profile(UserID))
@@ -35,14 +39,14 @@ export const EditProfile: React.FC = () => {
     const [form] = Form.useForm();
     const UserData = useSelector((state: AppStateType) => state.Profile.Profile)
     const UserAvatar = UserData?.addit_image[UserData.addit_image.length - 1]?.image
-    if (UserData) return <EditProfileBlock>
+    if (UserData) return <EditProfileBlock color={LayOutColor}>
         <SideHeader header={'Info'} prevLink={'Settings'}/>
-        <EditAvatar>
+        <EditAvatar color={AdditionalColor}>
                 <EditAvatarImage src={UserAvatar? ToCorrectImage(UserAvatar) : ''}/>
                 <Form name="user_photo" onFinish={onFinish} form={form}>
                     <Form.Item name="add_user_photo" rules={[{required: true, message: 'This field is required'}]}>
                         <Upload name="add_user_photo" maxCount = {1} listType={"picture"}>
-                            <EditAvatarButton>CHOOSE PHOTO</EditAvatarButton>
+                            <EditAvatarButton color={AdditionalColorActive}>CHOOSE PHOTO</EditAvatarButton>
                         </Upload>
                     </Form.Item>
                     <Form.Item>
@@ -52,6 +56,7 @@ export const EditProfile: React.FC = () => {
                     </Form.Item>
                 </Form>
         </EditAvatar>
+        <SpecialLine color={AdditionalColor}/>
         <div>
             <EditProfileItem ChapterName={'First Name'} FormName={"first_name"}
                              Icon={NameIcon} InitialValue={UserData.first_name? UserData.first_name: 'Click to input'}/>

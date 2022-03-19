@@ -14,6 +14,8 @@ import photo7 from "./../../../Assets/photo_2017-11-03_18-44-32.jpg"
 import photo8 from "./../../../Assets/photo_2020-07-20_12-54-28.jpg"
 import photo9 from "./../../../Assets/putin.jpeg"
 import photo10 from "./../../../Assets/screp.jpg"
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../../Redux/Store";
 
 
 type PropsType = {
@@ -21,8 +23,12 @@ type PropsType = {
 }
 
 export const ChannelImages: React.FC<PropsType> = ({ChangePage}) => {
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
     return <ChannelInfoBlock>
-        <ImagesPageHeader title={'Photos'} onBack={() => ChangePage("INFO")}/>
+        <ImagesPageHeader
+            title={<div>Photos</div>}
+            onBack={() => ChangePage("INFO")}
+            color={LayOutColor}/>
         <ImagesBlock>
             <ChannelImage src={photo}/>
             <ChannelImage src={photo1}/>

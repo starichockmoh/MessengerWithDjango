@@ -12,9 +12,12 @@ import {
 import {Avatar, Badge} from "antd";
 import {NotificationOutlined} from "@ant-design/icons";
 import { NavLink } from "react-router-dom";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {ActivateChannelsSaga} from "../../../Redux/Sagas/ChannelsSaga";
 import {ActivateDialogsSaga} from "../../../Redux/Sagas/DialogsSaga";
+import {AppStateType} from "../../../Redux/Store";
+import {WithColorType} from "../../../Types/Types";
+import { CustomNavLink } from "../../Common/CommonElements.styled";
 
 type PropsType = {
     ChannelPhoto: string
@@ -33,6 +36,9 @@ type PropsType = {
 
 export const ChannelListItem: React.FC<PropsType> = (props) => {
     const dispatch = useDispatch()
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
+    const AdditionalColorActive = useSelector((state: AppStateType) => state.App.AdditionalColorActive)
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
     const SetDetails = () => {
         if (!props.IsArchived){
             if (props.IsChannel) {
@@ -43,8 +49,13 @@ export const ChannelListItem: React.FC<PropsType> = (props) => {
         }
     }
 
-    return <NavLink to={props.IsArchived? '/archived_chats': '#'}>
-        <ListItem onClick={SetDetails} active = {props.IsActive}>
+    return <NavLink style={{color: LayOutColor === "white" ? "black" : "white"}}
+                    to={props.IsArchived? '/archived_chats': '#'}>
+        <ListItem onClick={SetDetails}
+                  active = {props.IsActive}
+                  color={LayOutColor}
+                  additional_color={AdditionalColor}
+                  active_color = {AdditionalColorActive}>
             <ChannelAvatar src={props.ChannelPhoto}/>
             <ChannelName> {props.IsChannel && <NotificationOutlined/>} {props.ChannelName} </ChannelName>
             <LastData>
@@ -52,12 +63,15 @@ export const ChannelListItem: React.FC<PropsType> = (props) => {
                     {props.LastMessageDate}
                 </LastMessageData>
             </LastData>
-            <LastMessage style={props.IsArchived? {color: 'black', fontWeight: 600}: undefined}>
+            <LastMessage style={props.IsArchived?
+                {fontWeight: 600,color: LayOutColor === "white" ? "black" : "white"}: undefined}>
                 <Media>{props.LastMessage.Media && props.LastMessage.Media + ', '}</Media>
                 {props.LastMessage.Text}
             </LastMessage>
             <MessagesCount>
-                <Badge style={{backgroundColor: "#CDC5BF"}} showZero count={props.MessagesCount}/>
+                <div style={{backgroundColor: LayOutColor === "white" ? "#BBBBBB" : "#3E546A", color: "white"}}>
+                    {props.MessagesCount > 99 ? "99+" : props.MessagesCount}
+                </div>
             </MessagesCount>
         </ListItem>
     </NavLink>

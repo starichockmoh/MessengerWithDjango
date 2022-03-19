@@ -5,11 +5,12 @@ import {SideHeader} from "../LeftSideBar/SideHeader";
 import { NavLink } from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {ActivateAuthSaga} from "../../Redux/Sagas/AuthSaga";
+import {WithColorType} from "../../Types/Types";
 
 
-export const Exit: React.FC = () => {
+export const Exit: React.FC<WithColorType> = ({LayOutColor}) => {
     const dispatch = useDispatch()
-    return <ExitBlock>
+    return <ExitBlock color={LayOutColor}>
         <SideHeader header={'Exit'}/>
         <ExitContent>
             <div>

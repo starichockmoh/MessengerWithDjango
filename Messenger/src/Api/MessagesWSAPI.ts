@@ -59,6 +59,7 @@ const initWebsocket = (id: number) => {
         emitter = emitt
         CleanUp()
         ws = new WebSocket(`ws://localhost:8000/ws/thread/${id}/`)
+        ws.binaryType = "arraybuffer";
         ws.addEventListener('close', CloseHandler)
         ws.addEventListener('open', OpenedHandler)
         ws.addEventListener('error', ErrorHandler)
@@ -69,6 +70,7 @@ const initWebsocket = (id: number) => {
     })
 }
 
+
 export const messagesWSAPI = {
     start(id: number) {
         return initWebsocket(id)
@@ -76,11 +78,33 @@ export const messagesWSAPI = {
     stop(){
         CleanUp()
     },
-    sendMessage(text: string, sender: string){
+    sendMessage(text: string, sender: string, photo: any){
         ws?.send(JSON.stringify({
-            'text': text,
-            'sender' : sender
-        }));
+                    'text': text,
+                    'sender' : sender,
+                    'quantity': 0,
+        }))
+
+        // const reader = new FileReader()
+        // // @ts-ignore
+        // let rawData = new ArrayBuffer()
+        // // @ts-ignore
+        // reader.loadend = function() {
+        // }
+        // reader.onload = function(e) {
+        //     // @ts-ignore
+        //     rawData = e.target.result;
+        //     debugger
+        //     ws?.send(JSON.stringify({
+        //         'text': text,
+        //         'sender' : sender,
+        //         'quantity': 1,
+        //         'image0': rawData,
+        //     }));
+        //     alert("the File has been transferred.")
+        // }
+        // reader.readAsArrayBuffer(photo);
+
     }
 }
 

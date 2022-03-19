@@ -4,7 +4,7 @@ import {EyeOutlined,CommentOutlined} from "@ant-design/icons";
 
 export const ChannelPost = styled("div")`
   width: 30vw;
-  background-color: white;
+  background-color: ${(props: {color: string}) => props.color};
   max-height: 150vh;
   overflow: hidden;
   margin-left: 18px;

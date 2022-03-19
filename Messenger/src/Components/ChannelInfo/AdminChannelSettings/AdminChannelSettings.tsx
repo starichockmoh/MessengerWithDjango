@@ -5,10 +5,6 @@ import {Button} from "antd";
 
 
 export const AdminChannelSettings: React.FC = () => {
-    return <EditProfileBlock>
-        Settings
-        <Button>
-            
-        </Button>
-    </EditProfileBlock>
+    return <>
+    </>
 }

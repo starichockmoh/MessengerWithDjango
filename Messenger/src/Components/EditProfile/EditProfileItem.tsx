@@ -16,6 +16,9 @@ type PropsType = {
 }
 export const EditProfileItem: React.FC<PropsType> = ({Icon, FormName, InitialValue, ChapterName}) => {
     const dispatch = useDispatch()
+
+    const AdditionalColor = useSelector((state: AppStateType) => state.App.AdditionalColor)
+
     const [value, SetValue] = useState('')
     const [IsMouseOn, SetMouseOn] = useState(false)
     const [IsEditMode, SetEditMode] = useState(false)
@@ -55,7 +58,7 @@ export const EditProfileItem: React.FC<PropsType> = ({Icon, FormName, InitialVal
 
     if (FormName === "about_user") {
         return <div>
-            <SpecialLine/>
+            <SpecialLine color={AdditionalColor}/>
             {IsFetching && <LoadingIcon/>}
             <div>
                 <TextArea style={{marginRight: 10}} value={value} onChange={onChangeValue}
@@ -73,7 +76,7 @@ export const EditProfileItem: React.FC<PropsType> = ({Icon, FormName, InitialVal
         </div>
     }
 
-    return <EditItem onMouseOver={() => SetMouseOn(true)} onMouseLeave={() => SetMouseOn(false)}>
+    return <EditItem color = {AdditionalColor} onMouseOver={() => SetMouseOn(true)} onMouseLeave={() => SetMouseOn(false)}>
         {IsFetching? <LoadingIcon/> : <Icon/>}
         <div>
             <EditUserName onClick={() => SetEditMode(true)} onBlur={CompleteForm}>

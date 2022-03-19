@@ -13,14 +13,14 @@ import {ActivateDialogsSaga} from "../../Redux/Sagas/DialogsSaga";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../Redux/Store";
 import {ToNiceDate} from "../../Helper Functions/ToNiceDate";
-import {ParticipantType} from "../../Types/Types";
+import {ParticipantType, WithColorType} from "../../Types/Types";
 import {GetPartItem} from "../../Helper Functions/GetPartItem";
 import {ChannelListsAC} from "../../Redux/Reducers/ChannelListsReducer";
 import {ActivateChannelsSaga} from "../../Redux/Sagas/ChannelsSaga";
 import {ToCorrectImage} from "../../Helper Functions/ToCorrectImage";
 
 
-export const ArchivedChannelList: React.FC = () => {
+export const ArchivedChannelList: React.FC<WithColorType> = ({LayOutColor, AdditionalColorActive}) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -42,19 +42,19 @@ export const ArchivedChannelList: React.FC = () => {
     const DialogsItems = DialogsData?.map(d => <ChannelListItem
         ChannelPhoto={ToCorrectImage(GetPartItem(d.participants, CurrentUserID, "photo"))}
         ChannelName={GetPartItem(d.participants, CurrentUserID, "name")}
-        LastMessageDate={ToNiceDate(d.get_messeges[d.get_messeges.length - 1]?.datetime)}
+        LastMessageDate={ToNiceDate(d.date_of_last_message)}
         LastMessage={{
             Media: null,
-            Text: d.get_messeges[d.get_messeges.length - 1]?.text
+            Text: d.last_message.text
         }}
-        MessagesCount={d.get_messeges.length}
+        MessagesCount={Math.floor(Math.random() * 100 / 10)}
         id={d.pk}
         IsActive={d.pk === CurrentDialogID}
         key={d.pk}
         IsChannel={false}/>)
 
-    return <ArchivedChannelsBlock>
-        <ArchivedChannelsHeader>
+    return <ArchivedChannelsBlock color={LayOutColor}>
+        <ArchivedChannelsHeader color={AdditionalColorActive}>
             <NavLink to={''}>
                 <BackButton onClick={GoBack} type={"link"} icon={<ArrowLeftOutlined/>}/>
             </NavLink>

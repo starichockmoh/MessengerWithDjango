@@ -2,6 +2,8 @@ import React from "react";
 import {Commentator, CommentBlock, CommentDate, CommentData, ContentBlock, CommentText, Author} from "./Comments.styled"
 import photo from "./../../../../Assets/putin.jpeg"
 import {Avatar, Comment} from "antd";
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../../../Redux/Store";
 
 
 type PropsType = {
@@ -13,7 +15,8 @@ type PropsType = {
 }
 
 export const CommentItem: React.FC<PropsType> = (props) => {
-    return <CommentBlock IsOtherUser = {props.IsOtherUser}>
+    const LayOutColor = useSelector((state: AppStateType) => state.App.LayOutColor)
+    return <CommentBlock IsOtherUser = {props.IsOtherUser} color={LayOutColor}>
         {props.IsOtherUser && <Avatar src={props.Avatar}/>}
         <div>
             <CommentData>
